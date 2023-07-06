@@ -4,15 +4,25 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "semantic-release": "semantic-release"
   },
   "devDependencies": {
     "@turbo/gen": "^1.9.7",
     "eslint": "^7.32.0",
     "eslint-config-custom": "workspace:*",
     "prettier": "^2.5.1",
-    "turbo": "latest"
+    "turbo": "latest",
+    "semantic-release": "^21.0.7",
+    "@semantic-release/npm": "10.0.4",
+    "@semantic-release/commit-analyzer": "10.0.1",
+    "@semantic-release/release-notes-generator": "11.0.4"
   },
   "packageManager": "pnpm@8.6.6",
-  "name": "typing-game"
+  "name": "typing-game",
+  "version": "0.0.0-development",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fun-software/typing-game.git"
+  }
 }
