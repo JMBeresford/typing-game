@@ -4,14 +4,15 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [
-        ".next/**",
-        "!.next/cache/**",
-        "dist/**",
-        "storybook-static/**"
-      ]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", "storybook-static/**"]
     },
-    "lint": {},
+    "lint": {
+      "dependsOn": ["^lint", "format"]
+    },
+    "format": {
+      "inputs": ["**/*.{js,jsx,ts,tsx,json,md,html,css,scss}"],
+      "outputs": ["**/*.{js,jsx,ts,tsx,json,md,html,css,scss}"]
+    },
     "dev": {
       "cache": false,
       "persistent": true
