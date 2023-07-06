@@ -1,24 +1,27 @@
 'use client';
 
 import * as React from 'react';
+import styles from './Button.module.scss';
 
 interface ButtonProps {
-  primary?: boolean;
-  backgroundColor?: string;
+  type?: 'primary' | 'secondary';
   size?: 'small' | 'medium' | 'large';
   label: string;
   onClick?: () => void;
 }
 
 export const Button = ({
-  primary = false,
+  type = 'primary',
   size = 'medium',
-  backgroundColor,
   label,
   ...props
 }: ButtonProps) => {
   return (
-    <button type='button' style={{ backgroundColor }} {...props}>
+    <button
+      type='button'
+      className={`${styles[type]} ${styles[size]}`}
+      {...props}
+    >
       {label}
     </button>
   );
