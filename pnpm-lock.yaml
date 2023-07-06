@@ -11,6 +11,9 @@ importers:
       '@semantic-release/commit-analyzer':
         specifier: 10.0.1
         version: 10.0.1(semantic-release@21.0.7)
+      '@semantic-release/github':
+        specifier: ^9.0.3
+        version: 9.0.3(semantic-release@21.0.7)
       '@semantic-release/npm':
         specifier: 10.0.4
         version: 10.0.4(semantic-release@21.0.7)
