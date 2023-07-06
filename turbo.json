@@ -11,10 +11,6 @@
         "storybook-static/**"
       ]
     },
-    "build:pages": {
-      "dependsOn": ["^build:pages"],
-      "outputs": [".next/**", "!.next/cache/**", ".vercel/**"]
-    },
     "lint": {},
     "dev": {
       "cache": false,
