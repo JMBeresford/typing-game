@@ -5,7 +5,8 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "turbo run format",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "cz": "cz"
   },
   "devDependencies": {
     "@semantic-release/commit-analyzer": "10.0.1",
@@ -17,7 +18,9 @@
     "eslint-config-custom": "workspace:*",
     "prettier": "^2.5.1",
     "semantic-release": "^21.0.7",
-    "turbo": "latest"
+    "turbo": "latest",
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0"
   },
   "packageManager": "pnpm@8.6.6",
   "name": "typing-game",
@@ -25,5 +28,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/jmberesford/typing-game.git"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   }
 }
