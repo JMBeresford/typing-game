@@ -2,7 +2,7 @@
 
 > Reading our [DEVELOPMENT.md](./DEVELOPMENT.md) guide is **highly recommended**
 
-This is a monorepo that is orchestrated via [Turborepo](https://turbo.build/repo). The main directories of note in this repo are the `/apps` directory and the `/packages` directory. Namely, the `/apps` directory contains applications and the `/packages` directory contains packages! Each of these directories are defined as _workspaces_ in our monorepo.
+This is a monorepo that is orchestrated via [Turborepo](https://turbo.build/repo). The main directories of note in this repo are the `/apps` directory and the `/packages` directory. Namely, the `/apps` directory contains applications and the `/packages` directory contains packages! Each of these directories are defined as _workspaces_ in our monorepo. Additionally, each of their subdirectories are also defined as workspaces (see [/pnpm-workspace.yaml](/pnpm-workspace.yaml)).
 
 # The Apps Workspace
 
