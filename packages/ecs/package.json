@@ -1,0 +1,26 @@
+{
+  "name": "ecs",
+  "version": "0.0.0",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint \"**/*.ts*\"",
+    "format": "prettier --write \"**/*.{ts,tsx,md,js,css,scss}\""
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@types/three": "^0.153.0",
+    "eslint": "^7.32.0",
+    "eslint-config-custom": "workspace:*",
+    "miniplex": "2.0.0-beta.3",
+    "react": "^18.1.0",
+    "three": "^0.154.0",
+    "tsconfig": "workspace:*",
+    "typescript": "^4.5.2"
+  },
+  "peerDependencies": {
+    "lib": "workspace:*"
+  }
+}
