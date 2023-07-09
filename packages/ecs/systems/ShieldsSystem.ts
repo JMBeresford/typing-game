@@ -1,8 +1,24 @@
-import { RootState, useFrame } from "lib/r3f";
+"use client";
 
-function tick(state: RootState, delta: number) {}
+import { useFrame } from "@lib/r3f";
+import { ECS } from "..";
+import { useEntities } from "miniplex/react";
+import { getLogger } from "@lib/logging";
+
+const log = getLogger(__filename);
 
 export function ShieldsSystem() {
-  useFrame(tick);
+  const hasShields = useEntities(ECS.world.archetype("shields"));
+
+  useFrame(() => {
+    for (const entity of hasShields) {
+      if (entity.shields.current <= 0) {
+        if ("destroy" in entity) continue;
+        ECS.world.addComponent(entity, "destroy", true);
+        log.debug("Entity marked for destruction: ", entity);
+      }
+    }
+  });
+
   return null;
 }

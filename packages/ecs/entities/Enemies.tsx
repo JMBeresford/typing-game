@@ -1,51 +1,81 @@
+"use client";
+
 import { With, hasComponents } from "miniplex";
 import { Text } from "@react-three/drei";
 import { ECS } from "..";
 import { Entity } from ".";
+import { useEntities } from "miniplex/react";
+import { Ref, forwardRef, useRef } from "react";
+import { BufferGeometry, Group, Material, Mesh } from "three";
+import { useFrame } from "@lib/r3f";
+import { getLogger } from "@lib/logging";
 
-const STARTING_SHIELDS = 3;
+const log = getLogger(__filename);
+
+const STARTING_SHIELDS = 1;
+const radius = 2.5;
+
 export type Enemy = With<Entity, "isEnemy" | "shields" | "transform" | "targetWord">;
-type EnemyProps = JSX.IntrinsicElements["group"] & { targetWord?: string };
+type EnemyProps = { targetWord: string; index?: number };
 
-function isEnemy(e: Entity): e is Enemy {
+export function isEnemy(e: Entity): e is Enemy {
   return hasComponents(e, "isEnemy");
 }
 
-spawnEnemy({ position: [-2, -2, 0], targetWord: "hello" });
-spawnEnemy({ position: [2, -2, 0], targetWord: "world" });
-spawnEnemy({ position: [0, 2, 0], targetWord: "foo" });
+const Enemy = forwardRef((props: { entity: Enemy; index: number }, ref: Ref<Group>) => {
+  const { entity, index } = props;
+  const innerRef = useRef<Mesh<BufferGeometry, Material>>(null);
+  const initialAngle = Math.PI * 2 * (index / ECS.world.archetype(isEnemy).entities.length);
 
-function Enemy(props: EnemyProps) {
+  useFrame(({ clock }) => {
+    if (!innerRef.current) return;
+    innerRef.current.position.x = Math.sin(initialAngle + clock.elapsedTime) * radius;
+    innerRef.current.position.y = Math.cos(initialAngle + clock.elapsedTime) * radius;
+
+    const camera = ECS.world.archetype("isCamera", "transform").first;
+    if (camera) {
+      innerRef.current.lookAt(camera.transform.position);
+    }
+  });
+
   return (
-    <group {...props}>
-      <mesh>
+    <group ref={ref}>
+      <mesh ref={innerRef}>
         <sphereGeometry args={[1, 32, 32]} />
         <meshBasicMaterial color="red" />
-      </mesh>
 
-      <Text position-z={1}>{props.targetWord}</Text>
+        <Text position-z={1}>{entity.targetWord}</Text>
+      </mesh>
+    </group>
+  );
+});
+
+Enemy.displayName = "Enemy";
+
+export function Enemies() {
+  const enemies = useEntities(ECS.world.archetype(isEnemy)).entities;
+
+  return (
+    <group>
+      {enemies.map((e, i) => (
+        <ECS.Entity entity={e} key={i}>
+          <ECS.Component name="transform">
+            <Enemy entity={e} index={i} />
+          </ECS.Component>
+        </ECS.Entity>
+      ))}
     </group>
   );
 }
 
-export function Enemies() {
-  const enemies = ECS.world.archetype(isEnemy);
-
-  return (
-    <>
-      <ECS.Entities in={enemies} children={e => e.render} />
-    </>
-  );
-}
-
-export function spawnEnemy(props?: EnemyProps) {
+export function spawnEnemy(props: EnemyProps) {
   const entity = ECS.world.add({
     isEnemy: true,
     shields: { max: STARTING_SHIELDS, current: STARTING_SHIELDS },
-    targetWord: props?.targetWord,
-
-    render: <Enemy {...props} />,
+    targetWord: props.targetWord,
   });
+
+  log.debug("spawned enemy", entity);
 
   return entity as Enemy;
 }

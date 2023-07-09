@@ -1,18 +1,14 @@
-import { useFrame } from "lib/r3f";
-import { ECS } from "..";
-import { hasComponents } from "miniplex";
-import { Player } from "../entities/Player";
-import { Entity } from "../entities";
+"use client";
 
-function isPlayer(e: Entity): e is Player {
-  return hasComponents(e, "isPlayer");
-}
+import { useFrame } from "@lib/r3f";
+import { ECS } from "..";
+import { useEntities } from "miniplex/react";
 
 export function PlayerSystem() {
+  const player = useEntities(ECS.world.archetype("isPlayer")).first;
   useFrame(() => {
-    const [player] = ECS.world.archetype(isPlayer);
-
     if (!player) return;
   });
+
   return null;
 }

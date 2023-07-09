@@ -1,21 +1,18 @@
-import { useFrame } from "lib/r3f";
-import { ECS } from "..";
-import { hasComponents } from "miniplex";
-import { Camera } from "../entities/Camera";
-import { Entity } from "../entities";
+"use client";
 
-function isCamera(e: Entity): e is Camera {
-  return hasComponents(e, "isCamera");
-}
+import { useFrame } from "@lib/r3f";
+import { ECS } from "..";
+import { useEntities } from "miniplex/react";
 
 export function CameraSystem() {
-  useFrame(() => {
-    const [camera] = ECS.world.archetype(isCamera);
+  const camera = useEntities(ECS.world.archetype("isCamera", "transform")).first;
 
+  useFrame(() => {
     if (!camera) return;
 
-    camera.transform.position.set(0, 0, 10);
+    camera.transform.position.set(0, 0, 15);
     camera.transform.lookAt(0, 0, 0);
   });
+
   return null;
 }

@@ -14,7 +14,13 @@
     "noUnusedParameters": false,
     "preserveWatchOutput": true,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "baseUrl": "../../",
+    "paths": {
+      "@lib/*": ["packages/lib/*"],
+      "@ui/*": ["packages/ui/*"],
+      "@ecs/*": ["packages/ecs/*"]
+    }
   },
   "exclude": ["node_modules"]
 }

@@ -3,6 +3,7 @@ import { Camera } from "./Camera";
 import { Object3D } from "three";
 import { ReactNode } from "react";
 import { Enemies } from "./Enemies";
+import { Wave } from "./Wave";
 
 export type Entity = {
   isPlayer?: boolean;
@@ -14,12 +15,16 @@ export type Entity = {
     current: number;
   };
 
+  // game-state
   targetWord?: string;
   typedCharacters?: string;
+  wave?: number;
 
+  // renderables
   transform?: Object3D;
-
   render?: ReactNode;
+
+  destroy?: boolean;
 };
 
 export function Entities() {
@@ -28,6 +33,7 @@ export function Entities() {
       <Player />
       <Camera />
       <Enemies />
+      <Wave />
     </>
   );
 }

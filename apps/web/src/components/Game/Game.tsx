@@ -1,11 +1,11 @@
 "use client";
 
-import { Canvas } from "lib/r3f";
+import { Canvas } from "@lib/r3f";
 import { ReactNode, Suspense } from "react";
 
 import styles from "./Game.module.scss";
-import { Systems } from "ecs/systems";
-import { Entities } from "ecs/entities";
+import { Systems } from "@ecs/systems";
+import { Entities } from "@ecs/entities";
 
 type Props = { children?: ReactNode };
 

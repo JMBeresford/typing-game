@@ -6,16 +6,12 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**", "storybook-static/**"]
     },
-    "lint": {
-      "dependsOn": ["^lint", "format"]
-    },
-    "format": {
-      "inputs": ["**/*.{js,jsx,ts,tsx,json,md,html,css,scss}"],
-      "outputs": ["**/*.{js,jsx,ts,tsx,json,md,html,css,scss}"]
-    },
+    "lint": {},
+    "format": {},
     "dev": {
       "cache": false,
       "persistent": true
     }
-  }
+  },
+  "globalEnv": ["NODE_ENV"]
 }
