@@ -4,8 +4,10 @@ import { Canvas } from "@lib/r3f";
 import { ReactNode, Suspense } from "react";
 
 import styles from "./Game.module.scss";
-import { Systems } from "@ecs/systems";
-import { Entities } from "@ecs/entities";
+import dynamic from "next/dynamic";
+
+const Systems = dynamic(() => import("@ecs/systems").then(mod => mod.Systems), { ssr: false });
+const Entities = dynamic(() => import("@ecs/entities").then(mod => mod.Entities), { ssr: false });
 
 type Props = { children?: ReactNode };
 
