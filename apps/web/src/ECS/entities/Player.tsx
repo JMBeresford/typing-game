@@ -1,6 +1,6 @@
 import { ECS } from "../state";
 import { PerspectiveCamera, Text } from "@react-three/drei";
-import { useLayoutEffect } from "react";
+import { useEffect } from "react";
 import { getLogger } from "@lib/logging";
 import { useEntities } from "miniplex-react";
 
@@ -9,7 +9,7 @@ const log = getLogger(__filename);
 const players = ECS.world.with("shields", "typedCharacters");
 
 export function Player() {
-  useLayoutEffect(() => {
+  useEffect(() => {
     log.debug("Init player");
     const p = ECS.world.add({ shields: { max: 3, current: 3 }, typedCharacters: "" });
 
