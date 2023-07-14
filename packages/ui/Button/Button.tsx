@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import styles from "./Button.module.scss";
 
 interface ButtonProps {
