@@ -1,13 +1,11 @@
 "use client";
 
-import { Canvas } from "@lib/r3f";
-import { ReactNode, Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
+import { ReactNode, StrictMode, Suspense } from "react";
 
 import styles from "./Game.module.scss";
-import dynamic from "next/dynamic";
-
-const Systems = dynamic(() => import("@ecs/systems").then(mod => mod.Systems), { ssr: false });
-const Entities = dynamic(() => import("@ecs/entities").then(mod => mod.Entities), { ssr: false });
+import { Systems, Entities } from "../../ECS";
+import { Stats } from "@react-three/drei";
 
 type Props = { children?: ReactNode };
 
@@ -15,13 +13,16 @@ export function Game({ children }: Props) {
   return (
     <div className={styles.game}>
       <Canvas>
-        <color attach="background" args={[0.05, 0.05, 0.08]} />
-
         <Suspense fallback={null}>
-          <Entities />
-          <Systems />
+          <StrictMode>
+            <color attach="background" args={[0.05, 0.05, 0.08]} />
+            <Systems />
+            <Entities />
+
+            <Stats />
+            {children}
+          </StrictMode>
         </Suspense>
-        {children}
       </Canvas>
     </div>
   );

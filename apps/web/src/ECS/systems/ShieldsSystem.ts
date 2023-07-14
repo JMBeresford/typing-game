@@ -1,17 +1,17 @@
-"use client";
-
-import { useFrame } from "@lib/r3f";
-import { ECS } from "..";
-import { useEntities } from "miniplex/react";
+import { ECS } from "../state";
+import { useEntities } from "miniplex-react";
 import { getLogger } from "@lib/logging";
+import { useFrame } from "@react-three/fiber";
 
 const log = getLogger(__filename);
 
+const hasShields = ECS.world.with("shields");
+
 export function ShieldsSystem() {
-  const hasShields = useEntities(ECS.world.archetype("shields"));
+  const entities = useEntities(hasShields);
 
   useFrame(() => {
-    for (const entity of hasShields) {
+    for (const entity of entities) {
       if (entity.shields.current <= 0) {
         if ("destroy" in entity) continue;
         ECS.world.addComponent(entity, "destroy", true);

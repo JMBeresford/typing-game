@@ -1,39 +1,41 @@
-"use client";
-
-import { ECS } from "..";
+import { ECS } from "../state";
 import { useEffect } from "react";
-import { useEntities } from "miniplex/react";
 import { getLogger } from "@lib/logging";
 import { spawnEnemy } from "../entities/Enemies";
+import { setTypedCharacters } from "../entities/Player";
 
 const log = getLogger(__filename);
 
-export function KeyboardSystem() {
-  const player = useEntities(ECS.world.archetype("isPlayer", "typedCharacters")).first;
+const enemies = ECS.world.with("targetWord");
+const players = ECS.world.with("typedCharacters");
 
-  function shootEnemy(targetWord?: string) {
-    const enemies = ECS.world.archetype("isEnemy", "targetWord", "shields");
-
-    for (const enemy of enemies) {
-      if (enemy.targetWord === targetWord) {
-        log.debug("hit enemy: ", enemy);
-        enemy.shields.current -= 1;
-      }
+function shootEnemy(targetWord?: string) {
+  log.trace("Shot at: ", targetWord);
+  for (const enemy of enemies) {
+    if (enemy.targetWord === targetWord) {
+      log.debug("hit enemy: ", enemy);
+      const shields = { ...enemy.shields };
+      shields.current -= 1;
+      ECS.world.removeComponent(enemy, "shields");
+      ECS.world.addComponent(enemy, "shields", shields);
     }
   }
+}
 
+export function KeyboardSystem() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      const player = players.first;
       if (!player) return;
       if (player.typedCharacters === null) player.typedCharacters = "";
 
       if (e.key.length === 1) {
-        player.typedCharacters += e.key;
+        setTypedCharacters(player.typedCharacters + e.key);
       } else if (e.key === "Backspace") {
-        player.typedCharacters = player.typedCharacters.slice(0, -1);
+        setTypedCharacters(player.typedCharacters.slice(0, -1));
       } else if (e.key === "Enter") {
         const targetWord = player.typedCharacters;
-        player.typedCharacters = "";
+        setTypedCharacters("");
         shootEnemy(targetWord);
         if (targetWord[0] === "/") {
           handleCommand(targetWord);
@@ -48,7 +50,7 @@ export function KeyboardSystem() {
     window.addEventListener("keydown", handleKeyDown);
 
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [player]);
+  }, []);
 
   return null;
 }
@@ -56,9 +58,10 @@ export function KeyboardSystem() {
 function handleCommand(cmd: string) {
   switch (cmd) {
     case "/spawn": {
-      spawnEnemy({ targetWord: "magoo" });
+      spawnEnemy("magoo");
       break;
     }
+
     default: {
       log.warn("Unknown command: ", cmd);
     }

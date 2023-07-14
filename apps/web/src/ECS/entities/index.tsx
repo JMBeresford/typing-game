@@ -1,15 +1,10 @@
 import { Player } from "./Player";
-import { Camera } from "./Camera";
 import { Object3D } from "three";
 import { ReactNode } from "react";
 import { Enemies } from "./Enemies";
-import { Wave } from "./Wave";
+import { WaveIndicator } from "./WaveIndicator";
 
 export type Entity = {
-  isPlayer?: boolean;
-  isEnemy?: boolean;
-  isCamera?: boolean;
-
   shields?: {
     max: number;
     current: number;
@@ -31,9 +26,8 @@ export function Entities() {
   return (
     <>
       <Player />
-      <Camera />
       <Enemies />
-      <Wave />
+      <WaveIndicator />
     </>
   );
 }

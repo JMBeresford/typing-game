@@ -1,10 +1,9 @@
-import { Button, Header } from "ui";
+import Link from "next/link";
 
 export default function Page() {
   return (
     <>
-      <Header user={{ name: "Foo" }} />
-      <Button label="Bar" />
+      <Link href="/game">Play Game</Link>
     </>
   );
 }
