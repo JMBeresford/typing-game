@@ -12,14 +12,16 @@
   "dependencies": {
     "@react-three/drei": "^9.78.2",
     "@react-three/fiber": "^8.13.5",
-    "miniplex": "2.0.0-beta.5",
-    "miniplex-react": "2.0.0-beta.5",
-    "three": "0.154.0",
+    "glslify-loader": "^2.0.0",
     "lib": "workspace:*",
+    "miniplex": "2.0.0-beta.6",
+    "miniplex-react": "2.0.0-beta.6",
     "next": "^13.4.1",
+    "raw-loader": "^4.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sass": "1.63.6",
+    "three": "0.154.0",
     "ui": "workspace:*"
   },
   "devDependencies": {
