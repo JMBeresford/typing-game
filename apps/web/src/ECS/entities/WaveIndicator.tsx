@@ -1,7 +1,7 @@
 import { useEntities } from "miniplex-react";
 import { ECS } from "../state";
 import { Text } from "@react-three/drei";
-import { getLogger } from "@lib/logging";
+import { getLogger } from "lib/logging";
 import { useEffect } from "react";
 
 const log = getLogger(__filename);

@@ -1,11 +1,11 @@
 import { ECS } from "../state";
 import { useEntities } from "miniplex-react";
-import { getLogger } from "@lib/logging";
+import { getLogger } from "lib/logging";
 import { useFrame } from "@react-three/fiber";
 
 const log = getLogger(__filename);
 
-const hasShields = ECS.world.with("shields");
+const hasShields = ECS.world.with("shields", "render");
 
 export function ShieldsSystem() {
   const entities = useEntities(hasShields);

@@ -1,0 +1,1 @@
+export { TargetText } from "./TargetText";

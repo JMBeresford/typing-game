@@ -1,42 +1,28 @@
 import { ECS } from "../state";
 import { useEffect } from "react";
-import { getLogger } from "@lib/logging";
-import { spawnEnemy } from "../entities/Enemies";
+import { getLogger } from "lib/logging";
 import { setTypedCharacters } from "../entities/Player";
+import { spawnEnemy } from "../actions";
 
 const log = getLogger(__filename);
 
-const enemies = ECS.world.with("targetWord");
 const players = ECS.world.with("typedCharacters");
-
-function shootEnemy(targetWord?: string) {
-  log.trace("Shot at: ", targetWord);
-  for (const enemy of enemies) {
-    if (enemy.targetWord === targetWord) {
-      log.debug("hit enemy: ", enemy);
-      const shields = { ...enemy.shields };
-      shields.current -= 1;
-      ECS.world.removeComponent(enemy, "shields");
-      ECS.world.addComponent(enemy, "shields", shields);
-    }
-  }
-}
 
 export function KeyboardSystem() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const player = players.first;
       if (!player) return;
-      if (player.typedCharacters === null) player.typedCharacters = "";
+      const currentChars = player.typedCharacters;
 
       if (e.key.length === 1) {
-        setTypedCharacters(player.typedCharacters + e.key);
+        setTypedCharacters(currentChars + e.key);
       } else if (e.key === "Backspace") {
-        setTypedCharacters(player.typedCharacters.slice(0, -1));
+        setTypedCharacters(currentChars.slice(0, -1));
       } else if (e.key === "Enter") {
-        const targetWord = player.typedCharacters;
+        const targetWord = currentChars;
         setTypedCharacters("");
-        shootEnemy(targetWord);
+
         if (targetWord[0] === "/") {
           handleCommand(targetWord);
         }

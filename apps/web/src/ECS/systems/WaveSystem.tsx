@@ -1,8 +1,9 @@
 import { useEntities } from "miniplex-react";
 import { ECS } from "../state";
-import { spawnEnemy } from "../entities/Enemies";
-import { getLogger } from "@lib/logging";
+import { getLogger } from "lib/logging";
 import { useFrame } from "@react-three/fiber";
+import { spawnEnemy } from "../actions";
+import { generateWord } from "@/utils";
 
 const log = getLogger(__filename);
 
@@ -14,6 +15,7 @@ export function WaveSystem() {
   const waveEntity = useEntities(withWave).first;
 
   useFrame(() => {
+    if (!waveEntity) return;
     if (enemies.size <= 0) {
       const { wave } = waveEntity;
       const nextWave = wave + 1;
@@ -26,7 +28,8 @@ export function WaveSystem() {
       ECS.world.addComponent(waveEntity, "wave", nextWave);
 
       for (let i = 0; i < newEnemyCount; i++) {
-        spawnEnemy(`${Math.floor(Math.random() * 100)}`);
+        const word = generateWord();
+        spawnEnemy(word);
       }
     }
   });

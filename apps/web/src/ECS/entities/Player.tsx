@@ -1,17 +1,21 @@
 import { ECS } from "../state";
 import { PerspectiveCamera, Text } from "@react-three/drei";
 import { useEffect } from "react";
-import { getLogger } from "@lib/logging";
+import { getLogger } from "lib/logging";
 import { useEntities } from "miniplex-react";
 
 const log = getLogger(__filename);
 
-const players = ECS.world.with("shields", "typedCharacters");
+const players = ECS.world.with("shields", "typedCharacters", "targetedEnemy");
 
 export function Player() {
   useEffect(() => {
     log.debug("Init player");
-    const p = ECS.world.add({ shields: { max: 3, current: 3 }, typedCharacters: "" });
+    const p = ECS.world.add({
+      shields: { max: 3, current: 3 },
+      typedCharacters: "",
+      targetedEnemy: null,
+    });
 
     return () => {
       ECS.world.remove(p);

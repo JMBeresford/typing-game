@@ -12,7 +12,7 @@ type Props = { children?: ReactNode };
 export function Game({ children }: Props) {
   return (
     <div className={styles.game}>
-      <Canvas>
+      <Canvas gl={{ antialias: true }}>
         <Suspense fallback={null}>
           <StrictMode>
             <color attach="background" args={[0.05, 0.05, 0.08]} />
