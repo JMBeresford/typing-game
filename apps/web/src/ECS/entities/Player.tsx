@@ -28,7 +28,7 @@ export function Player() {
     <ECS.Entity entity={player}>
       <ECS.Component name="transform">
         <PerspectiveCamera makeDefault>
-          <Text anchorY={"bottom"} fontSize={0.02} position={[0, -0.095, -0.2]}>
+          <Text anchorY={"bottom"} fontSize={0.02} position={[0, -0.0925, -0.2]}>
             {player?.typedCharacters}
           </Text>
         </PerspectiveCamera>

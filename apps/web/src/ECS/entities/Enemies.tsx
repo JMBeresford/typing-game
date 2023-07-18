@@ -1,10 +1,10 @@
 import { ECS } from "../state";
 import { useEntities } from "miniplex-react";
 
-export const withRenderMethod = ECS.world.with("render");
+export const renderableEnemies = ECS.world.with("render", "targetWord");
 
-export function Renderables() {
-  const entities = useEntities(withRenderMethod);
+export function Enemies() {
+  const entities = useEntities(renderableEnemies);
 
   return (
     <group>

@@ -1,7 +1,7 @@
 import { Player } from "./Player";
 import { Object3D } from "three";
 import { ReactNode } from "react";
-import { Renderables } from "./Renderables";
+import { Enemies } from "./Enemies";
 import { WaveIndicator } from "./WaveIndicator";
 import { TargetableEnemy } from "@/utils";
 
@@ -37,7 +37,7 @@ export function Entities() {
   return (
     <>
       <Player />
-      <Renderables />
+      <Enemies />
       <WaveIndicator />
     </>
   );

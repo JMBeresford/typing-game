@@ -1,6 +1,8 @@
 import { useThree } from "@react-three/fiber";
 import { useCallback, useMemo } from "react";
 
+const MAX_PIXELS = 1750;
+
 export function useMaxWidth(targetPosition: [number, number, number] = [0, 0, 0]) {
   const size = useThree(state => state.size);
   const camera = useThree(state => state.camera);
@@ -10,7 +12,7 @@ export function useMaxWidth(targetPosition: [number, number, number] = [0, 0, 0]
     const ratio = viewport.width / size.width;
 
     // max out at 1750px, else 90% of viewport
-    return Math.min(viewport.width * 0.9, ratio * 1750);
+    return Math.min(viewport.width * 0.9, ratio * MAX_PIXELS);
   }, [viewport, size]);
 
   return maxWidth;
@@ -29,7 +31,7 @@ export function useMaxWidthGetter() {
       const ratio = viewport.width / size.width;
 
       // max out at 1750px, else 90% of viewport
-      return Math.min(viewport.width * 0.9, ratio * 1750);
+      return Math.min(viewport.width * 0.9, ratio * MAX_PIXELS);
     },
     [getCurrentViewport, size, camera],
   );
