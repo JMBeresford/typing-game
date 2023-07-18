@@ -22,7 +22,8 @@
     "react-dom": "^18.2.0",
     "sass": "1.63.6",
     "three": "0.154.0",
-    "ui": "workspace:*"
+    "ui": "workspace:*",
+    "zustand": "^4.3.9"
   },
   "devDependencies": {
     "@types/node": "^17.0.12",

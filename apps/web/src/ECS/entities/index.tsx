@@ -14,8 +14,12 @@ export type Entity = {
   // game-state
   targetWord?: string;
   typedCharacters?: string;
-  wave?: number;
   targetedEnemy?: TargetableEnemy | null;
+  spawnedAt?: number;
+  staggerBy?: number;
+
+  // combat
+  attackSpeed?: number;
 
   // optional initial transforms
   position?: [number, number, number];

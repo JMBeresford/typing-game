@@ -4,32 +4,32 @@ import { getLogger } from "lib/logging";
 import { useFrame } from "@react-three/fiber";
 import { spawnEnemy } from "../actions";
 import { generateWord } from "@/utils";
+import { useStore } from "@/store";
 
 const log = getLogger(__filename);
 
 const withTargetWord = ECS.world.with("targetWord");
-const withWave = ECS.world.with("wave");
 
 export function WaveSystem() {
+  const { waveNumber } = useStore(state => state.wave);
   const enemies = useEntities(withTargetWord);
-  const waveEntity = useEntities(withWave).first;
 
-  useFrame(() => {
-    if (!waveEntity) return;
+  useFrame(({ clock }) => {
     if (enemies.size <= 0) {
-      const { wave } = waveEntity;
-      const nextWave = wave + 1;
+      const nextWave = waveNumber + 1;
       const newEnemyCount = Math.floor(nextWave * 1.5);
 
-      log.debug(`Wave ${wave} complete`);
+      log.debug(`Wave ${waveNumber} complete`);
       log.debug(`Spawning ${newEnemyCount} enemies for wave ${nextWave}`);
 
-      ECS.world.removeComponent(waveEntity, "wave");
-      ECS.world.addComponent(waveEntity, "wave", nextWave);
+      useStore.setState({
+        wave: { waveNumber: nextWave, startTime: clock.elapsedTime, numEnemies: newEnemyCount },
+      });
 
       for (let i = 0; i < newEnemyCount; i++) {
         const word = generateWord();
-        spawnEnemy(word);
+
+        spawnEnemy({ targetWord: word, staggerBy: i * 0.5, spawnedAt: clock.elapsedTime });
       }
     }
   });

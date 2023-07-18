@@ -9,16 +9,16 @@ import { randFloat } from "three/src/math/MathUtils";
 const log = getLogger(__filename);
 const STARTING_SHIELDS = 1;
 
-export function spawnEnemy(targetWord: string): Entity {
+export function spawnEnemy(components: Partial<Entity>): Entity {
   const high = 15;
   const low = 10;
   const x = randFloat(low, high) * (Math.random() > 0.5 ? 1 : -1);
   const y = randFloat(low, high) * (Math.random() > 0.5 ? 1 : -1);
   const enemy: Entity = ECS.world.add({
-    targetWord: targetWord,
     render: <RenderEnemy />,
     shields: { max: STARTING_SHIELDS, current: STARTING_SHIELDS },
     position: [x, y, -5],
+    ...components,
   });
 
   log.debug("Spawned enemy", enemy);
