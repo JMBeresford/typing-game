@@ -1,4 +1,5 @@
 import { DestroySystem } from "./DestroySystem";
+import { EnemyCombatSystem } from "./EnemyCombatSystem";
 import { EnemyMovementSystem } from "./EnemyMovementSystem";
 import { KeyboardSystem } from "./KeyboardSystem";
 import { PlayerSystem } from "./PlayerSystem";
@@ -15,6 +16,7 @@ export function Systems() {
       <KeyboardSystem />
       <DestroySystem />
       <EnemyMovementSystem />
+      <EnemyCombatSystem />
       <PlayerTargetingSystem />
     </>
   );

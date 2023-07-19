@@ -2,6 +2,7 @@ import { useMatcapTexture } from "@react-three/drei";
 import { Shield } from "./Shield";
 import { TargetText } from "./TargetText";
 import { ECS } from "@/ECS/state";
+import { WeaponTimer } from "./WeaponTimer";
 
 export function RenderEnemy() {
   const entity = ECS.useCurrentEntity();
@@ -15,6 +16,7 @@ export function RenderEnemy() {
       </mesh>
 
       <TargetText position-z={1.1} />
+      <WeaponTimer position-z={1.1} />
 
       {Number(entity.shields?.max) > 1 && <Shield />}
     </>

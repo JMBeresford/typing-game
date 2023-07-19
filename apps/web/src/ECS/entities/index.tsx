@@ -20,6 +20,7 @@ export type Entity = {
 
   // combat
   attackSpeed?: number;
+  nextAttackAt?: number | null;
 
   // optional initial transforms
   position?: [number, number, number];

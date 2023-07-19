@@ -5,7 +5,7 @@ import { damp } from "three/src/math/MathUtils";
 import { useMaxHeight, useMaxWidth } from "@/hooks";
 import { useStore } from "@/store";
 
-const isEnemy = ECS.world.with("targetWord", "transform");
+const isEnemy = ECS.world.with("targetWord", "transform", "spawnedAt");
 const isPlayer = ECS.world.with("typedCharacters", "transform");
 
 export function EnemyMovementSystem() {
@@ -20,7 +20,7 @@ export function EnemyMovementSystem() {
     let idx = 0;
     for (const enemy of enemies) {
       const staggerBy = enemy.staggerBy ?? 0;
-      const isStaggered = enemy.spawnedAt && clock.elapsedTime < enemy.spawnedAt + staggerBy;
+      const isStaggered = clock.elapsedTime < enemy.spawnedAt + staggerBy;
       if (!isStaggered) {
         const initialRotation = (idx * 2 * Math.PI) / numEnemies;
         const lambda = 2;

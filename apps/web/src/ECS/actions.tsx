@@ -18,6 +18,8 @@ export function spawnEnemy(components: Partial<Entity>): Entity {
     render: <RenderEnemy />,
     shields: { max: STARTING_SHIELDS, current: STARTING_SHIELDS },
     position: [x, y, -5],
+    nextAttackAt: null,
+    attackSpeed: 5,
     ...components,
   });
 
@@ -32,6 +34,18 @@ export function shootEnemy(enemy: With<Entity, "shields">) {
   shields.current -= 1;
   ECS.world.removeComponent(enemy, "shields");
   ECS.world.addComponent(enemy, "shields", shields);
+}
+
+export function shootPlayer(shotBy: Entity) {
+  const player = ECS.world.with("shields", "typedCharacters").first;
+
+  if (player) {
+    log.debug("Player shot by: ", shotBy);
+    const shields = { ...player.shields };
+    shields.current -= 1;
+    ECS.world.removeComponent(player, "shields");
+    ECS.world.addComponent(player, "shields", shields);
+  }
 }
 
 export function targetEnemy(enemy: TargetableEnemy | null) {
