@@ -44,7 +44,7 @@ export function KeyboardSystem() {
 function handleCommand(cmd: string) {
   switch (cmd) {
     case "/spawn": {
-      spawnEnemy("magoo");
+      spawnEnemy({ targetWord: "magoo" });
       break;
     }
 
