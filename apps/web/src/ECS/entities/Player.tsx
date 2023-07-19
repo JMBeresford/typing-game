@@ -1,8 +1,9 @@
 import { ECS } from "../state";
-import { PerspectiveCamera, Text } from "@react-three/drei";
+import { PerspectiveCamera } from "@react-three/drei";
 import { useEffect } from "react";
 import { getLogger } from "lib/logging";
 import { useEntities } from "miniplex-react";
+import { RenderPlayer } from "@/components/renderables/RenderPlayer";
 
 const log = getLogger(__filename);
 
@@ -28,9 +29,7 @@ export function Player() {
     <ECS.Entity entity={player}>
       <ECS.Component name="transform">
         <PerspectiveCamera makeDefault>
-          <Text anchorY={"bottom"} fontSize={0.02} position={[0, -0.0925, -0.2]}>
-            {player?.typedCharacters}
-          </Text>
+          <RenderPlayer />
         </PerspectiveCamera>
       </ECS.Component>
     </ECS.Entity>
