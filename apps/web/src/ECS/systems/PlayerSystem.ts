@@ -1,8 +1,7 @@
 import { useFrame } from "@react-three/fiber";
 import { useEntities } from "miniplex-react";
 import { ECS } from "../state";
-import { shootEnemy } from "../actions";
-import { setTypedCharacters } from "../entities/Player";
+import { setTypedCharacters, shootEnemy } from "../actions";
 
 const players = ECS.world.with("transform", "typedCharacters", "targetedEnemy");
 

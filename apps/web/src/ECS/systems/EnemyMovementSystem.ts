@@ -4,6 +4,7 @@ import { useFrame } from "@react-three/fiber";
 import { damp } from "three/src/math/MathUtils";
 import { useMaxHeight, useMaxWidth } from "@/hooks";
 import { useStore } from "@/store";
+import { useMemoComparison } from "@/hooks/useMemoComparison";
 
 const isEnemy = ECS.world.with("targetWord", "transform", "spawnedAt");
 const isPlayer = ECS.world.with("typedCharacters", "transform");
@@ -14,9 +15,14 @@ export function EnemyMovementSystem() {
   const { numEnemies } = useStore(state => state.wave);
   const maxHeight = useMaxHeight();
   const maxWidth = useMaxWidth();
+  const lookAt = useMemoComparison(
+    () => player?.transform.position,
+    [player],
+    (a, b) => b != undefined && a !== b,
+  );
 
   useFrame(({ clock }, dt) => {
-    if (!player || enemies.size <= 0) return;
+    if (enemies.size <= 0) return;
     let idx = 0;
     for (const enemy of enemies) {
       const staggerBy = enemy.staggerBy ?? 0;
@@ -33,7 +39,10 @@ export function EnemyMovementSystem() {
         enemy.transform.position.x = damp(enemy.transform.position.x, x, lambda, dt);
         enemy.transform.position.y = damp(enemy.transform.position.y, y, lambda, dt);
         enemy.transform.position.z = damp(enemy.transform.position.z, 0, lambda, dt);
-        enemy.transform.lookAt(player.transform.position);
+
+        if (lookAt) {
+          enemy.transform.lookAt(lookAt.x, lookAt.y, lookAt.z);
+        }
       }
 
       idx += 1;

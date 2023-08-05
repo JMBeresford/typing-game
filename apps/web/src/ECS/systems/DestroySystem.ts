@@ -1,5 +1,5 @@
 import { ECS } from "../state";
-import { getLogger } from "lib/logging";
+import { getLogger } from "logging";
 import { Entity } from "../entities";
 import { useEntities, useOnEntityAdded } from "miniplex-react";
 
@@ -15,6 +15,9 @@ export function DestroySystem() {
   const toDestroy = useEntities(ECS.world.with("destroy"));
 
   useOnEntityAdded(toDestroy, (entity: Entity) => {
+    if ("typedCharacters" in entity) {
+      log.debug("Game over!");
+    }
     destroy(entity);
   });
 

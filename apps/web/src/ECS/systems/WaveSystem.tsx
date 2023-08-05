@@ -1,6 +1,6 @@
 import { useEntities } from "miniplex-react";
 import { ECS } from "../state";
-import { getLogger } from "lib/logging";
+import { getLogger } from "logging";
 import { useFrame } from "@react-three/fiber";
 import { spawnEnemy } from "../actions";
 import { generateWord } from "@/utils";

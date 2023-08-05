@@ -2,7 +2,7 @@ import { With } from "miniplex";
 import { RenderEnemy } from "../components/renderables/RenderEnemy";
 import { Entity } from "./entities";
 import { ECS } from "./state";
-import { getLogger } from "lib/logging";
+import { getLogger } from "logging";
 import { TargetableEnemy } from "@/utils";
 import { randFloat } from "three/src/math/MathUtils";
 
@@ -49,10 +49,19 @@ export function shootPlayer(shotBy: Entity) {
 }
 
 export function targetEnemy(enemy: TargetableEnemy | null) {
-  const player = ECS.world.with("shields", "typedCharacters", "targetedEnemy").first;
+  const player = ECS.world.with("targetedEnemy").first;
   if (player) {
     log.debug("Targeted enemy: ", enemy);
     ECS.world.removeComponent(player, "targetedEnemy");
     ECS.world.addComponent(player, "targetedEnemy", enemy);
   }
 }
+
+export const setTypedCharacters = (typedCharacters: string) => {
+  const player = ECS.world.with("typedCharacters").first;
+
+  if (player) {
+    ECS.world.removeComponent(player, "typedCharacters");
+    ECS.world.addComponent(player, "typedCharacters", typedCharacters);
+  }
+};

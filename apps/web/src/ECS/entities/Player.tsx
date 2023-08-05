@@ -1,7 +1,7 @@
 import { ECS } from "../state";
 import { PerspectiveCamera } from "@react-three/drei";
-import { useEffect } from "react";
-import { getLogger } from "lib/logging";
+import { useLayoutEffect } from "react";
+import { getLogger } from "logging";
 import { useEntities } from "miniplex-react";
 import { RenderPlayer } from "@/components/renderables/RenderPlayer";
 
@@ -10,7 +10,9 @@ const log = getLogger(__filename);
 const players = ECS.world.with("shields", "typedCharacters", "targetedEnemy");
 
 export function Player() {
-  useEffect(() => {
+  const player = useEntities(players).first;
+
+  useLayoutEffect(() => {
     log.debug("Init player");
     const p = ECS.world.add({
       shields: { max: 3, current: 3 },
@@ -23,8 +25,6 @@ export function Player() {
     };
   }, []);
 
-  const player = useEntities(players).first;
-
   return (
     <ECS.Entity entity={player}>
       <ECS.Component name="transform">
@@ -35,12 +35,3 @@ export function Player() {
     </ECS.Entity>
   );
 }
-
-export const setTypedCharacters = (typedCharacters: string) => {
-  const player = players.first;
-
-  if (player) {
-    ECS.world.removeComponent(player, "typedCharacters");
-    ECS.world.addComponent(player, "typedCharacters", typedCharacters);
-  }
-};

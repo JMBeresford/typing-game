@@ -6,14 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint --max-warnings=0",
     "format": "prettier --write \"app/**/*.{ts,tsx,md,js,json,scss,css}\""
   },
   "dependencies": {
     "@react-three/drei": "^9.78.2",
     "@react-three/fiber": "^8.13.5",
     "glslify-loader": "^2.0.0",
-    "lib": "workspace:*",
+    "logging": "workspace:*",
     "miniplex": "2.0.0",
     "miniplex-react": "2.0.1",
     "next": "^13.4.1",

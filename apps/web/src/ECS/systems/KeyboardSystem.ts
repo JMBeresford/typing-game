@@ -1,8 +1,7 @@
 import { ECS } from "../state";
 import { useEffect } from "react";
-import { getLogger } from "lib/logging";
-import { setTypedCharacters } from "../entities/Player";
-import { spawnEnemy } from "../actions";
+import { getLogger } from "logging";
+import { setTypedCharacters, spawnEnemy } from "../actions";
 
 const log = getLogger(__filename);
 
