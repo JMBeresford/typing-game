@@ -1,16 +1,19 @@
-import { ECS } from "../state";
+import { ECS } from "..";
 import { useEffect } from "react";
 import { getLogger } from "logging";
 import { setTypedCharacters, spawnEnemy } from "../actions";
+import { useEntities } from "miniplex-react";
 
 const log = getLogger(__filename);
 
-const players = ECS.world.with("typedCharacters");
+const isPlayer = ECS.world.with("typedCharacters");
 
 export function KeyboardSystem() {
+  const players = useEntities(isPlayer);
+  const player = players.first;
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      const player = players.first;
       if (!player) return;
       const currentChars = player.typedCharacters;
 
@@ -35,7 +38,7 @@ export function KeyboardSystem() {
     window.addEventListener("keydown", handleKeyDown);
 
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [player]);
 
   return null;
 }

@@ -1,35 +1,37 @@
 import { useEntities } from "miniplex-react";
-import { ECS } from "../state";
-import { getLogger } from "logging";
+import { ECS } from "..";
 import { useFrame } from "@react-three/fiber";
 import { spawnEnemy } from "../actions";
 import { generateWord } from "@/utils";
-import { useStore } from "@/store";
-
-const log = getLogger(__filename);
+import { useStore } from "@/state";
 
 const withTargetWord = ECS.world.with("targetWord");
 
 export function WaveSystem() {
-  const { waveNumber } = useStore(state => state.wave);
   const enemies = useEntities(withTargetWord);
+  const startWave = useStore(state => state.wave.startWave);
+  const finishWave = useStore(state => state.wave.finishWave);
+  const endTime = useStore(state => state.wave.endTime);
+  const phase = useStore(state => state.wave.phase);
+  const timeBetweenWaves = useStore(state => state.wave.timeBetweenWaves);
+  const getNumEnemies = useStore(state => state.wave.getNumEnemies);
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
     if (enemies.size <= 0) {
-      const nextWave = waveNumber + 1;
-      const newEnemyCount = Math.floor(nextWave * 1.5);
+      if (endTime != undefined && phase === "preparing") {
+        const timeForNextWave = endTime + timeBetweenWaves - performance.now();
+        if (timeForNextWave <= 0) {
+          startWave();
+          const newEnemyCount = getNumEnemies();
 
-      log.debug(`Wave ${waveNumber} complete`);
-      log.debug(`Spawning ${newEnemyCount} enemies for wave ${nextWave}`);
+          for (let i = 0; i < newEnemyCount; i++) {
+            const word = generateWord();
 
-      useStore.setState({
-        wave: { waveNumber: nextWave, startTime: clock.elapsedTime, numEnemies: newEnemyCount },
-      });
-
-      for (let i = 0; i < newEnemyCount; i++) {
-        const word = generateWord();
-
-        spawnEnemy({ targetWord: word, staggerBy: i * 1.5, spawnedAt: clock.elapsedTime });
+            spawnEnemy({ targetWord: word, staggerBy: i * 1500, spawnedAt: performance.now() });
+          }
+        }
+      } else if (phase === "wave") {
+        finishWave();
       }
     }
   });

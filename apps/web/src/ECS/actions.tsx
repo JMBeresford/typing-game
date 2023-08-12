@@ -1,13 +1,15 @@
 import { With } from "miniplex";
-import { RenderEnemy } from "../components/renderables/RenderEnemy";
+import { RenderEnemy } from "./renderables/RenderEnemy";
 import { Entity } from "./entities";
-import { ECS } from "./state";
+import { ECS } from ".";
 import { getLogger } from "logging";
 import { TargetableEnemy } from "@/utils";
 import { randFloat } from "three/src/math/MathUtils";
 
 const log = getLogger(__filename);
 const STARTING_SHIELDS = 1;
+
+const isPlayer = ECS.world.with("typedCharacters");
 
 export function spawnEnemy(components: Partial<Entity>): Entity {
   const high = 15;
@@ -19,7 +21,7 @@ export function spawnEnemy(components: Partial<Entity>): Entity {
     shields: { max: STARTING_SHIELDS, current: STARTING_SHIELDS },
     position: [x, y, -5],
     nextAttackAt: null,
-    attackSpeed: 5,
+    attackSpeed: 5000,
     ...components,
   });
 
@@ -28,28 +30,16 @@ export function spawnEnemy(components: Partial<Entity>): Entity {
   return enemy;
 }
 
-export function shootEnemy(enemy: With<Entity, "shields">) {
-  log.debug("Shot enemy: ", enemy);
-  const shields = { ...enemy.shields };
+export function shootEntity(entity: With<Entity, "shields">, shooter: Entity) {
+  log.debug("Entity shot: ", entity, " by: ", shooter);
+  const shields = { ...entity.shields };
   shields.current -= 1;
-  ECS.world.removeComponent(enemy, "shields");
-  ECS.world.addComponent(enemy, "shields", shields);
-}
-
-export function shootPlayer(shotBy: Entity) {
-  const player = ECS.world.with("shields", "typedCharacters").first;
-
-  if (player) {
-    log.debug("Player shot by: ", shotBy);
-    const shields = { ...player.shields };
-    shields.current -= 1;
-    ECS.world.removeComponent(player, "shields");
-    ECS.world.addComponent(player, "shields", shields);
-  }
+  ECS.world.removeComponent(entity, "shields");
+  ECS.world.addComponent(entity, "shields", shields);
 }
 
 export function targetEnemy(enemy: TargetableEnemy | null) {
-  const player = ECS.world.with("targetedEnemy").first;
+  const player = isPlayer.first;
   if (player) {
     log.debug("Targeted enemy: ", enemy);
     ECS.world.removeComponent(player, "targetedEnemy");
@@ -58,10 +48,16 @@ export function targetEnemy(enemy: TargetableEnemy | null) {
 }
 
 export const setTypedCharacters = (typedCharacters: string) => {
-  const player = ECS.world.with("typedCharacters").first;
+  const player = isPlayer.first;
 
   if (player) {
     ECS.world.removeComponent(player, "typedCharacters");
     ECS.world.addComponent(player, "typedCharacters", typedCharacters);
   }
 };
+
+export function destroyEntity(entity: Entity) {
+  ECS.world.remove(entity);
+
+  log.debug(`Destroyed entity: `, entity);
+}

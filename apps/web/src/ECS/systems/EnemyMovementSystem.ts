@@ -1,9 +1,10 @@
 import { useEntities } from "miniplex-react";
-import { ECS } from "../state";
+import { ECS } from "..";
 import { useFrame } from "@react-three/fiber";
 import { damp } from "three/src/math/MathUtils";
-import { useMaxHeight, useMaxWidth } from "@/hooks";
-import { useStore } from "@/store";
+import { useMaxHeight } from "@/hooks/useMaxHeight";
+import { useMaxWidth } from "@/hooks/useMaxWidth";
+import { useStore } from "@/state";
 import { useMemoComparison } from "@/hooks/useMemoComparison";
 
 const isEnemy = ECS.world.with("targetWord", "transform", "spawnedAt");
@@ -26,7 +27,7 @@ export function EnemyMovementSystem() {
     let idx = 0;
     for (const enemy of enemies) {
       const staggerBy = enemy.staggerBy ?? 0;
-      const isStaggered = clock.elapsedTime < enemy.spawnedAt + staggerBy;
+      const isStaggered = performance.now() < enemy.spawnedAt + staggerBy;
       if (!isStaggered) {
         const initialRotation = (idx * 2 * Math.PI) / numEnemies;
         const lambda = 2;

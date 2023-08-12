@@ -1,5 +1,5 @@
 import { Text } from "@react-three/drei";
-import { ECS } from "@/ECS/state";
+import { ECS } from "@/ECS";
 import { TargetTextMaterial, TargetTextMaterialProps } from "./shader";
 import { useRef } from "react";
 import { MeshType } from "@/utils";

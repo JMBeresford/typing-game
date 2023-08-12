@@ -1,0 +1,69 @@
+$header-footer-margin: 1.25rem;
+
+.backdrop {
+  background-color: rgba(0, 0, 0, 0.75);
+  opacity: 1;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+
+  display: grid;
+  place-items: center;
+
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: all;
+  touch-action: auto;
+
+  &.hidden {
+    pointer-events: none;
+    touch-action: none;
+    opacity: 0;
+  }
+}
+
+.modal {
+  background-color: rgb(61, 61, 61);
+  border-radius: 10px;
+  min-width: 300px;
+  max-width: 600px;
+  padding: 1rem 1.5rem;
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  hr {
+    opacity: 0.15;
+    border: 1px solid inherit;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: clamp(2rem, 1.5vw + 1rem, 3rem);
+  margin-bottom: $header-footer-margin;
+}
+
+.textContent {
+  width: 100%;
+  font-size: 1rem;
+  max-width: 65ch;
+}
+
+.footer {
+  margin-top: $header-footer-margin;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}

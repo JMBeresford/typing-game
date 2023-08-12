@@ -1,12 +1,13 @@
 import { useFrame } from "@react-three/fiber";
 import { useEntities } from "miniplex-react";
-import { ECS } from "../state";
-import { setTypedCharacters, shootEnemy } from "../actions";
+import { ECS } from "..";
+import { setTypedCharacters, shootEntity } from "../actions";
 
-const players = ECS.world.with("transform", "typedCharacters", "targetedEnemy");
+const isPlayer = ECS.world.with("transform", "typedCharacters", "targetedEnemy");
 
 export function PlayerSystem() {
-  const player = useEntities(players).first;
+  const players = useEntities(isPlayer);
+  const player = players.first;
 
   useFrame(() => {
     if (!player) return;
@@ -14,11 +15,9 @@ export function PlayerSystem() {
     player.transform.position.set(0, 0, 15);
     player.transform.lookAt(0, 0, 0);
 
-    if (player.targetedEnemy !== null) {
-      if (player.targetedEnemy.targetWord === player.typedCharacters) {
-        shootEnemy(player.targetedEnemy);
-        setTypedCharacters("");
-      }
+    if (player.targetedEnemy?.targetWord === player.typedCharacters) {
+      shootEntity(player.targetedEnemy, player);
+      setTypedCharacters("");
     }
   });
 

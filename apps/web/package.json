@@ -10,9 +10,11 @@
     "format": "prettier --write \"app/**/*.{ts,tsx,md,js,json,scss,css}\""
   },
   "dependencies": {
+    "@react-spring/three": "^9.7.3",
     "@react-three/drei": "^9.78.2",
     "@react-three/fiber": "^8.13.5",
     "glslify-loader": "^2.0.0",
+    "immer": "^10.0.2",
     "logging": "workspace:*",
     "miniplex": "2.0.0",
     "miniplex-react": "2.0.1",
@@ -22,6 +24,7 @@
     "react-dom": "^18.2.0",
     "sass": "1.63.6",
     "three": "0.154.0",
+    "tunnel-rat": "^0.1.2",
     "ui": "workspace:*",
     "zustand": "^4.3.9"
   },

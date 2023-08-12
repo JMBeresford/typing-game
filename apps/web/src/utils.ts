@@ -1,8 +1,9 @@
 import { With, Without } from "miniplex";
 import { BufferGeometry, Material, Mesh } from "three";
 import { Entity } from "./ECS/entities";
-import { ECS } from "./ECS/state";
+import { ECS } from "./ECS";
 
+export type Time = { mins: number; secs: number };
 export type MeshType<T extends Material> = Mesh<BufferGeometry, T>;
 export type TargetableEnemy = Without<With<Entity, "shields" | "targetWord">, "destroy">;
 
@@ -31,4 +32,10 @@ export function generateWord(
   }
 
   return word;
+}
+
+export function msElapsedToTime(ms: number): Time {
+  const secs = Math.floor(ms / 1000);
+  const mins = Math.floor(secs / 60);
+  return { mins, secs: secs % 60 };
 }

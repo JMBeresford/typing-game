@@ -1,5 +1,5 @@
 import { useEntities } from "miniplex-react";
-import { ECS } from "../state";
+import { ECS } from "..";
 import { useFrame } from "@react-three/fiber";
 import { targetEnemy } from "../actions";
 

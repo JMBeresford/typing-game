@@ -1,5 +1,5 @@
 import { useFrame } from "@react-three/fiber";
-import { ECS } from "@/ECS/state";
+import { ECS } from "@/ECS";
 import { MeshType } from "@/utils";
 import { useRef } from "react";
 import { Color, MeshBasicMaterial } from "three";

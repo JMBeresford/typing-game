@@ -1,4 +1,4 @@
-import { Game } from "../../src/components/Game";
+import { Game } from "./Game";
 
 export default function Page() {
   return <Game />;

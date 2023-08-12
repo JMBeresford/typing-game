@@ -1,27 +1,31 @@
 import { useFrame } from "@react-three/fiber";
-import { ECS } from "../state";
+import { ECS } from "..";
 import { useEntities } from "miniplex-react";
-import { shootPlayer } from "../actions";
+import { shootEntity } from "../actions";
 import { Entity } from "../entities";
 import { With } from "miniplex";
 
+const isPlayer = ECS.world.with("shields", "typedCharacters");
 const isEnemy = ECS.world.with("targetWord", "spawnedAt", "attackSpeed", "nextAttackAt");
 
 export function EnemyCombatSystem() {
   const enemies = useEntities(isEnemy);
-  useFrame(({ clock }) => {
+  const players = useEntities(isPlayer);
+  const player = players.first;
+
+  useFrame(() => {
     for (const enemy of enemies) {
       const staggerBy = enemy.staggerBy ?? 0;
       const staggeredUntil = enemy.spawnedAt + staggerBy;
-      const isStaggered = clock.elapsedTime < staggeredUntil;
+      const isStaggered = performance.now() < staggeredUntil;
       if (!isStaggered) {
         if (enemy.nextAttackAt === null) {
-          setNextAttackAt(enemy, clock.elapsedTime + enemy.attackSpeed);
+          setNextAttackAt(enemy, performance.now() + enemy.attackSpeed);
         } else {
-          if (clock.elapsedTime >= enemy.nextAttackAt) {
-            shootPlayer(enemy);
+          if (performance.now() >= enemy.nextAttackAt && player) {
+            shootEntity(player, enemy);
 
-            setNextAttackAt(enemy, clock.elapsedTime + enemy.attackSpeed);
+            setNextAttackAt(enemy, performance.now() + enemy.attackSpeed);
           }
         }
       }

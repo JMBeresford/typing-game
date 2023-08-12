@@ -1,4 +1,4 @@
-import { ECS } from "../state";
+import { ECS } from "..";
 import { useEntities } from "miniplex-react";
 import { getLogger } from "logging";
 import { useFrame } from "@react-three/fiber";

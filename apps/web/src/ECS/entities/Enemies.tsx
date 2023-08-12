@@ -1,4 +1,4 @@
-import { ECS } from "../state";
+import { ECS } from "..";
 import { useEntities } from "miniplex-react";
 
 export const renderableEnemies = ECS.world.with("render", "targetWord");

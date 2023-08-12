@@ -1,9 +1,14 @@
-import Link from "next/link";
+import { Button } from "ui";
+import styles from "./page.module.scss";
 
 export default function Page() {
   return (
-    <>
-      <Link href="/game">Play Game</Link>
-    </>
+    <div className={styles.wrapper}>
+      <main className={styles.mainMenu}>
+        <Button>
+          <Button.Link href="/game">Play Game</Button.Link>
+        </Button>
+      </main>
+    </div>
   );
 }

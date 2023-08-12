@@ -1,7 +1,7 @@
 import { useMatcapTexture } from "@react-three/drei";
 import { Shield } from "./Shield";
 import { TargetText } from "./TargetText";
-import { ECS } from "@/ECS/state";
+import { ECS } from "@/ECS";
 import { WeaponTimer } from "./WeaponTimer";
 
 export function RenderEnemy() {
