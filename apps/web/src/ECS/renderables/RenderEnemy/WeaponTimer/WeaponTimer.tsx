@@ -9,13 +9,15 @@ export function WeaponTimer(props: JSX.IntrinsicElements["mesh"]) {
   const entity = ECS.useCurrentEntity();
   const ref = useRef<MeshType<MeshBasicMaterial>>(null);
   const phase = useStore(state => state.wave.phase);
+  const getElapsedTime = useStore(state => state.clock.getElapsedTime);
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
     if (!entity || !ref.current || phase === "game over") return;
     const { attackSpeed, nextAttackAt } = entity;
     if (!attackSpeed || !nextAttackAt) return;
+    const elapsedTime = getElapsedTime();
 
-    const timeUntilNextAttack = nextAttackAt - clock.elapsedTime;
+    const timeUntilNextAttack = nextAttackAt - elapsedTime;
     ref.current.scale.x = timeUntilNextAttack / attackSpeed;
   });
 

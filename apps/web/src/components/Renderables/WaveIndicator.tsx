@@ -13,6 +13,7 @@ export function WaveIndicator() {
   const phase = useStore(state => state.wave.phase);
   const endTime = useStore(state => state.wave.endTime);
   const timeBetweenWaves = useStore(state => state.wave.timeBetweenWaves);
+  const getElapsedTime = useStore(state => state.clock.getElapsedTime);
   const [timer, setTimer] = useState(0);
 
   const { waveIndicatorOpacity, timerOpacity } = useSpring({
@@ -20,9 +21,10 @@ export function WaveIndicator() {
     timerOpacity: phase === "preparing" ? 1 : 0,
   });
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
     if (endTime != undefined && phase === "preparing") {
-      const timeForNextWave = endTime + timeBetweenWaves - clock.elapsedTime;
+      const elapsedTime = getElapsedTime();
+      const timeForNextWave = endTime + timeBetweenWaves - elapsedTime;
       if (timeForNextWave > 0) {
         setTimer(Math.ceil(timeForNextWave));
       }

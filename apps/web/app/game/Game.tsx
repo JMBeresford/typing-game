@@ -1,7 +1,6 @@
 "use client";
 
 import { ReactNode, useLayoutEffect } from "react";
-
 import styles from "./Game.module.scss";
 import { Systems } from "@/ECS/systems";
 import { Entities } from "@/ECS/entities";
@@ -11,6 +10,7 @@ import { GameOverScreen } from "./GameOverScreen";
 import { ScenePortal } from "@/components/ScenePortal";
 import { useStore } from "@/state";
 import { getLogger } from "logging";
+import { PauseScreen } from "./PauseScreen";
 
 const log = getLogger(__filename);
 
@@ -30,6 +30,7 @@ export function Game({ children }: Props) {
   return (
     <div className={styles.game}>
       <GameOverScreen />
+      <PauseScreen />
       <ScenePortal>
         <Systems />
         <Entities />

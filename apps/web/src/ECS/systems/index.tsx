@@ -1,3 +1,4 @@
+import { ClockSystem } from "./ClockSystem";
 import { DestructionSystem } from "./DestructionSystem";
 import { EnemyCombatSystem } from "./EnemyCombatSystem";
 import { EnemyMovementSystem } from "./EnemyMovementSystem";
@@ -10,6 +11,7 @@ import { WaveSystem } from "./WaveSystem";
 export function Systems() {
   return (
     <>
+      <ClockSystem />
       <WaveSystem />
       <PlayerSystem />
       <ShieldsSystem />

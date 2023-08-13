@@ -15,11 +15,13 @@ export function WaveSystem() {
   const phase = useStore(state => state.wave.phase);
   const timeBetweenWaves = useStore(state => state.wave.timeBetweenWaves);
   const getNumEnemies = useStore(state => state.wave.getNumEnemies);
+  const getElapsedTime = useStore(state => state.clock.getElapsedTime);
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
     if (enemies.size <= 0) {
       if (endTime != undefined && phase === "preparing") {
-        const timeForNextWave = endTime + timeBetweenWaves - clock.elapsedTime;
+        const elapsedTime = getElapsedTime();
+        const timeForNextWave = endTime + timeBetweenWaves - elapsedTime;
         if (timeForNextWave <= 0) {
           startWave();
           const newEnemyCount = getNumEnemies();
@@ -27,7 +29,7 @@ export function WaveSystem() {
           for (let i = 0; i < newEnemyCount; i++) {
             const word = generateWord();
 
-            spawnEnemy({ targetWord: word, staggerBy: i * 1.5, spawnedAt: clock.elapsedTime });
+            spawnEnemy({ targetWord: word, staggerBy: i * 1.5, spawnedAt: elapsedTime });
           }
         }
       } else if (phase === "wave") {
