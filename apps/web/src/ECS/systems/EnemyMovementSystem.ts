@@ -27,7 +27,7 @@ export function EnemyMovementSystem() {
     let idx = 0;
     for (const enemy of enemies) {
       const staggerBy = enemy.staggerBy ?? 0;
-      const isStaggered = performance.now() < enemy.spawnedAt + staggerBy;
+      const isStaggered = clock.elapsedTime < enemy.spawnedAt + staggerBy;
       if (!isStaggered) {
         const initialRotation = (idx * 2 * Math.PI) / numEnemies;
         const lambda = 2;

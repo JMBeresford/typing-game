@@ -13,19 +13,19 @@ export function EnemyCombatSystem() {
   const players = useEntities(isPlayer);
   const player = players.first;
 
-  useFrame(() => {
+  useFrame(({ clock }) => {
     for (const enemy of enemies) {
       const staggerBy = enemy.staggerBy ?? 0;
       const staggeredUntil = enemy.spawnedAt + staggerBy;
-      const isStaggered = performance.now() < staggeredUntil;
+      const isStaggered = clock.elapsedTime < staggeredUntil;
       if (!isStaggered) {
         if (enemy.nextAttackAt === null) {
-          setNextAttackAt(enemy, performance.now() + enemy.attackSpeed);
+          setNextAttackAt(enemy, clock.elapsedTime + enemy.attackSpeed);
         } else {
-          if (performance.now() >= enemy.nextAttackAt && player) {
+          if (clock.elapsedTime >= enemy.nextAttackAt && player) {
             shootEntity(player, enemy);
 
-            setNextAttackAt(enemy, performance.now() + enemy.attackSpeed);
+            setNextAttackAt(enemy, clock.elapsedTime + enemy.attackSpeed);
           }
         }
       }

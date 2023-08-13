@@ -9,8 +9,6 @@ export function Player() {
   const players = useEntities(isPlayer);
   const player = players.first;
 
-  if (!player) return null;
-
   return (
     <ECS.Entity entity={player}>
       <ECS.Component name="transform">

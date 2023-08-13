@@ -21,7 +21,7 @@ export function spawnEnemy(components: Partial<Entity>): Entity {
     shields: { max: STARTING_SHIELDS, current: STARTING_SHIELDS },
     position: [x, y, -5],
     nextAttackAt: null,
-    attackSpeed: 5000,
+    attackSpeed: 5,
     ...components,
   });
 

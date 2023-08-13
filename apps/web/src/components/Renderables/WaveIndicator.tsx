@@ -20,11 +20,11 @@ export function WaveIndicator() {
     timerOpacity: phase === "preparing" ? 1 : 0,
   });
 
-  useFrame(() => {
+  useFrame(({ clock }) => {
     if (endTime != undefined && phase === "preparing") {
-      const timeForNextWave = endTime + timeBetweenWaves - performance.now();
+      const timeForNextWave = endTime + timeBetweenWaves - clock.elapsedTime;
       if (timeForNextWave > 0) {
-        setTimer(Math.ceil(timeForNextWave / 1000));
+        setTimer(Math.ceil(timeForNextWave));
       }
     }
   });

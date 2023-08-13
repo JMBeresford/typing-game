@@ -2,6 +2,7 @@ import { StateCreator } from "zustand";
 import { GlobalState } from ".";
 import { getLogger } from "logging";
 import { ECS } from "@/ECS";
+import { Clock } from "three";
 
 const log = getLogger(__filename);
 
@@ -19,6 +20,7 @@ type InternalWaveState = {
 
   // Time between waves in *milliseconds*
   timeBetweenWaves: number;
+  clock?: Clock;
   finishedWaves: FinishedWave[];
 };
 
@@ -28,23 +30,11 @@ type WaveActions = {
   getNumEnemies: () => number;
   gameOver: () => void;
   getCurrentWave: () => Wave;
-  reset: () => void;
+  getElapsedTime: () => number;
+  reset: () => Wave & InternalWaveState;
 };
 
 export type WaveState = Wave & InternalWaveState & WaveActions;
-
-const getInitialState: () => Wave & InternalWaveState = () => {
-  const t = performance.now();
-  return {
-    startTime: t,
-    endTime: t,
-    waveNumber: 0,
-    numEnemies: 0,
-    phase: "preparing",
-    timeBetweenWaves: 5000,
-    finishedWaves: [],
-  };
-};
 
 export const createWaveState: StateCreator<
   GlobalState,
@@ -52,7 +42,13 @@ export const createWaveState: StateCreator<
   [],
   WaveState
 > = (_set, _get) => ({
-  ...getInitialState(),
+  startTime: 0,
+  endTime: 0,
+  waveNumber: 0,
+  numEnemies: 0,
+  phase: "preparing",
+  timeBetweenWaves: 5,
+  finishedWaves: [],
   startWave: () => {
     const { wave } = _get();
     const nextWave = wave.waveNumber + 1;
@@ -62,14 +58,15 @@ export const createWaveState: StateCreator<
     _set(state => {
       state.wave.waveNumber = nextWave;
       state.wave.numEnemies = newEnemyCount;
-      state.wave.startTime = performance.now();
+      state.wave.startTime = wave.getElapsedTime();
       state.wave.endTime = undefined;
       state.wave.phase = "wave";
     });
   },
   finishWave: () => {
-    log.info(`Wave ${_get().wave.waveNumber} complete`);
-    const endTime = performance.now();
+    const { wave } = _get();
+    log.info(`Wave ${wave.waveNumber} complete`);
+    const endTime = wave.getElapsedTime();
 
     _set(state => {
       state.wave.endTime = endTime;
@@ -86,7 +83,7 @@ export const createWaveState: StateCreator<
   getNumEnemies: () => _get().wave.numEnemies,
   gameOver: () => {
     _set(state => {
-      state.wave.endTime = performance.now();
+      state.wave.endTime = _get().wave.getElapsedTime();
       state.wave.phase = "game over";
     });
   },
@@ -99,6 +96,10 @@ export const createWaveState: StateCreator<
       numEnemies: wave.numEnemies,
     };
   },
+  getElapsedTime: () => {
+    const wave = _get().wave;
+    return wave.clock?.getElapsedTime() ?? 0;
+  },
   reset: () => {
     ECS.world.clear();
 
@@ -109,10 +110,21 @@ export const createWaveState: StateCreator<
       targetedEnemy: null,
     });
 
+    const t = _get().wave.getElapsedTime();
+    const initialState: Wave & InternalWaveState = {
+      startTime: t,
+      endTime: t,
+      waveNumber: 0,
+      numEnemies: 0,
+      phase: "preparing",
+      timeBetweenWaves: 5,
+      finishedWaves: [],
+    };
+
     _set(state => {
-      Object.assign(state.wave, getInitialState());
+      Object.assign(state.wave, initialState);
     });
+
+    return initialState;
   },
 });
-
-performance.clearResourceTimings;

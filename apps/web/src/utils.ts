@@ -35,7 +35,13 @@ export function generateWord(
 }
 
 export function msElapsedToTime(ms: number): Time {
-  const secs = Math.floor(ms / 1000);
+  const secs = parseFloat(Math.floor(ms / 1000).toFixed(2));
+  const mins = Math.floor(secs / 60);
+  return { mins, secs: secs % 60 };
+}
+
+export function secElapsedToTime(_secs: number): Time {
+  const secs = parseFloat(_secs.toFixed(2));
   const mins = Math.floor(secs / 60);
   return { mins, secs: secs % 60 };
 }

@@ -1,10 +1,9 @@
 import { useStore } from "@/state";
-import { Button, Modal } from "ui";
-import styles from "./GameOverScreen.module.scss";
+import { Button, Modal, Table } from "ui";
 import { ECS } from "@/ECS";
 import { useEntities } from "miniplex-react";
 import { useMemo } from "react";
-import { msElapsedToTime } from "@/utils";
+import { secElapsedToTime } from "@/utils";
 
 const isLiveEnemy = ECS.world.with("targetWord").without("destroy");
 
@@ -15,6 +14,7 @@ export function GameOverScreen() {
   const numEnemies = useStore(state => state.wave.numEnemies);
   const curWaveStarted = useStore(state => state.wave.startTime);
   const curWaveEnded = useStore(state => state.wave.endTime);
+  const getElapsedTime = useStore(state => state.wave.getElapsedTime);
   const numEnemiesKilled = useMemo(
     () =>
       finishedWaves.reduce((acc, wave) => acc + wave.numEnemies, 0) +
@@ -23,11 +23,11 @@ export function GameOverScreen() {
   );
   const timeElapsed = useMemo(
     () =>
-      msElapsedToTime(
+      secElapsedToTime(
         finishedWaves.reduce((acc, wave) => acc + (wave.endTime - wave.startTime), 0) +
-          ((curWaveEnded ?? performance.now()) - curWaveStarted),
+          ((curWaveEnded ?? getElapsedTime()) - curWaveStarted),
       ),
-    [finishedWaves, curWaveEnded, curWaveStarted],
+    [finishedWaves, curWaveEnded, curWaveStarted, getElapsedTime],
   );
 
   return (
@@ -35,22 +35,22 @@ export function GameOverScreen() {
       <Modal.Header>Game Over</Modal.Header>
 
       <Modal.TextContent>
-        <table className={styles.statsTable}>
-          <tbody>
-            <tr>
-              <td>Waves Completed</td>
-              <td>{finishedWaves.length}</td>
-            </tr>
-            <tr>
-              <td>Time Elapsed</td>
-              <td>{`${timeElapsed.mins}m ${timeElapsed.secs}s`}</td>
-            </tr>
-            <tr>
-              <td>Enemies Shot Down</td>
-              <td>{numEnemiesKilled}</td>
-            </tr>
-          </tbody>
-        </table>
+        <Table>
+          <Table.Body>
+            <Table.Row>
+              <Table.Data>Waves Completed</Table.Data>
+              <Table.Data>{finishedWaves.length}</Table.Data>
+            </Table.Row>
+            <Table.Row>
+              <Table.Data>Time Elapsed</Table.Data>
+              <Table.Data>{`${timeElapsed.mins}m ${timeElapsed.secs}s`}</Table.Data>
+            </Table.Row>
+            <Table.Row>
+              <Table.Data>Enemies Shot Down</Table.Data>
+              <Table.Data>{numEnemiesKilled}</Table.Data>
+            </Table.Row>
+          </Table.Body>
+        </Table>
       </Modal.TextContent>
 
       <Modal.Footer>

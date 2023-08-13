@@ -6,6 +6,12 @@
   font-family: inherit;
   font-weight: inherit;
   cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    touch-action: none;
+  }
 }
 
 .primary {

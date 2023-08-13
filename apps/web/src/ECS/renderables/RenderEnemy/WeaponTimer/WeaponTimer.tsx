@@ -10,12 +10,12 @@ export function WeaponTimer(props: JSX.IntrinsicElements["mesh"]) {
   const ref = useRef<MeshType<MeshBasicMaterial>>(null);
   const phase = useStore(state => state.wave.phase);
 
-  useFrame(() => {
+  useFrame(({ clock }) => {
     if (!entity || !ref.current || phase === "game over") return;
     const { attackSpeed, nextAttackAt } = entity;
     if (!attackSpeed || !nextAttackAt) return;
 
-    const timeUntilNextAttack = nextAttackAt - performance.now();
+    const timeUntilNextAttack = nextAttackAt - clock.elapsedTime;
     ref.current.scale.x = timeUntilNextAttack / attackSpeed;
   });
 

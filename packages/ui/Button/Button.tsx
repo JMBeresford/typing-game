@@ -2,12 +2,11 @@ import { ReactNode } from "react";
 import styles from "./Button.module.scss";
 import { ButtonLink } from "./ButtonLink";
 
-interface ButtonProps {
+type ButtonProps = {
   type?: "primary" | "secondary";
   size?: "small" | "medium" | "large";
-  onClick?: () => void;
   children: ReactNode;
-}
+} & Omit<JSX.IntrinsicElements["button"], "type">;
 
 function Button({ type = "primary", size = "medium", children, ...props }: ButtonProps) {
   return (
