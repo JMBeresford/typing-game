@@ -1,21 +1,8 @@
 "use client";
 
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { SceneTunnel } from "./ScenePortal";
-import { MutableRefObject, ReactNode, StrictMode, Suspense, useEffect, useRef } from "react";
-import { useStore } from "@/state";
-
-function Clock() {
-  const { clock } = useThree();
-
-  useEffect(() => {
-    useStore.setState(s => {
-      s.wave.clock = clock;
-    });
-  }, [clock]);
-
-  return null;
-}
+import { MutableRefObject, ReactNode, StrictMode, Suspense, useRef } from "react";
 
 export function SceneRoot(props: { children?: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null) as MutableRefObject<HTMLDivElement>;
@@ -47,7 +34,6 @@ export function SceneRoot(props: { children?: ReactNode }) {
       >
         <Suspense fallback={null}>
           <StrictMode>
-            <Clock />
             <SceneTunnel.Out />
           </StrictMode>
         </Suspense>
