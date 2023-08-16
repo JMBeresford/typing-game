@@ -1,0 +1,16 @@
+.nav {
+  display: flex;
+  gap: 0.5rem;
+  color: inherit;
+}
+
+.navItem {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button {
+  background-color: unset;
+  border: unset;
+}

@@ -1,16 +1,29 @@
 "use client";
 
-import { ReactNode, useCallback, useState } from "react";
+import { MouseEvent, ReactNode, useCallback, useState } from "react";
 import styles from "./Modal.module.scss";
 
-function Modal(props: { open: boolean; backdropClickCloses?: boolean; children: ReactNode }) {
+function Modal(props: {
+  open: boolean;
+  backdropClickCloses?: boolean;
+  children: ReactNode;
+  onClose?: () => void;
+}) {
+  const { onClose, backdropClickCloses } = props;
   const [closedByBackdrop, setClosedByBackdrop] = useState(false);
 
-  const handleClick = useCallback(() => {
-    if (props.backdropClickCloses === true) {
-      setClosedByBackdrop(false);
-    }
-  }, [props.backdropClickCloses]);
+  const handleClick = useCallback(
+    (e: MouseEvent) => {
+      if (backdropClickCloses && e.target === e.currentTarget) {
+        if (onClose) {
+          onClose();
+        } else {
+          setClosedByBackdrop(true);
+        }
+      }
+    },
+    [backdropClickCloses, onClose],
+  );
 
   return (
     <div
