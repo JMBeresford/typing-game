@@ -25,7 +25,7 @@ function SignUpModalContent() {
       <Modal.TextContent>
         <p>Sign up for an account to continue</p>
 
-        <form className={styles.form}>
+        <form action="/auth/sign-up" method="post" className={styles.form}>
           <label htmlFor="email">Email</label>
           <input type="email" id="email" />
 
@@ -63,7 +63,7 @@ function SignInModalContent() {
       <Modal.TextContent>
         <p>Sign in to your account to continue</p>
 
-        <form className={styles.form}>
+        <form action="/auth/sign-in" method="post" className={styles.form}>
           <label htmlFor="email">Email</label>
           <input type="email" id="email" />
 
