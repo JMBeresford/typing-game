@@ -16,16 +16,11 @@ export async function POST(request: Request) {
     const res = await supabase.auth.signOut();
     if (res.error) {
       log.error("Error logging out: ", res.error);
-      return NextResponse.redirect("/500", {
-        status: 500,
-        statusText: res.error.message,
-      });
+      return NextResponse.error();
     }
   } catch (error) {
     log.error("Error logging out: ", error);
-    return NextResponse.redirect("/500", {
-      status: 500,
-    });
+    return NextResponse.error();
   }
 
   return NextResponse.redirect(requestUrl.origin, {

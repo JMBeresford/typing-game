@@ -1,7 +1,16 @@
-import { ReactNode, createContext, useContext } from "react";
-import { Button, Modal } from "ui";
+import {
+  FormEvent,
+  Fragment,
+  ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+} from "react";
+import { Button, ButtonGroup, Modal } from "ui";
 import styles from "./AuthModals.module.scss";
 import { useMemoComparison } from "@/hooks/useMemoComparison";
+import { useRouter } from "next/navigation";
 
 export type AuthContext = "signUp" | "signIn" | null;
 export type AuthModalContext = {
@@ -15,8 +24,58 @@ export const AuthModalContext = createContext<AuthModalContext>({
 });
 export const useAuthModalContext = () => useContext(AuthModalContext);
 
+export const Input = ["email", "password", "confirmPassword"] as const;
+export type Input = typeof Input[number];
+const InputDisplayNames: Record<Input, string> = {
+  email: "Email",
+  password: "Password",
+  confirmPassword: "Confirm Password",
+};
+const InputHtmlTypes: Record<Input, HTMLInputElement["type"]> = {
+  email: "email",
+  password: "password",
+  confirmPassword: "password",
+};
+
 function SignUpModalContent() {
   const { setCurrentContext } = useAuthModalContext();
+  const [errors, setErrors] = useState<Record<Input, string | null>>({
+    email: null,
+    password: null,
+    confirmPassword: null,
+  });
+  const router = useRouter();
+
+  const handleSubmit = useCallback(
+    async (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+
+      try {
+        const response = await fetch(event.currentTarget.action, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (response.ok) {
+          window.alert("Account created successfully! Check your email for verification.");
+          router.refresh();
+        } else {
+          try {
+            const data = await response.json();
+            if (data.errors) {
+              setErrors(data.errors);
+            }
+          } catch (error) {
+            throw error;
+          }
+        }
+      } catch (error) {
+        throw error;
+      }
+    },
+    [router],
+  );
 
   return (
     <>
@@ -25,22 +84,26 @@ function SignUpModalContent() {
       <Modal.TextContent>
         <p>Sign up for an account to continue</p>
 
-        <form action="/api/auth/signup" method="post" className={styles.form}>
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" name="email" />
+        <form action="api/auth/signup" onSubmit={handleSubmit} className={styles.form}>
+          {Input.map(input => (
+            <Fragment key={input}>
+              <label htmlFor={input}>{InputDisplayNames[input]}</label>
+              {errors[input] !== null && <p className={styles.error}>{errors[input]}</p>}
+              <input
+                type={InputHtmlTypes[input]}
+                id={input}
+                name={input}
+                onChange={() => setErrors(prev => ({ ...prev, [input]: null }))}
+              />
+            </Fragment>
+          ))}
 
-          <label htmlFor="password">Password</label>
-          <input type="password" id="password" name="password" />
-
-          <label htmlFor="confirmPassword">Confirm Password</label>
-          <input type="password" id="confirmPassword" name="confirmPassword" />
-
-          <div className={styles.buttonGroup}>
+          <ButtonGroup>
             <Button type="submit">Sign Up</Button>
             <Button type="button" disabled>
               Forgot Password
             </Button>
-          </div>
+          </ButtonGroup>
         </form>
       </Modal.TextContent>
 
@@ -55,6 +118,41 @@ function SignUpModalContent() {
 
 function SignInModalContent() {
   const { setCurrentContext } = useAuthModalContext();
+  const inputs = ["email", "password"] as const;
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+  const handleSubmit = useCallback(
+    async (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const formData = new FormData(event.currentTarget);
+
+      try {
+        const response = await fetch(event.currentTarget.action, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (response.ok) {
+          router.refresh();
+        }
+
+        if (response.status === 400) {
+          try {
+            const data = await response.json();
+            if (data.error) {
+              setError(data.error);
+            }
+          } catch (error) {
+            throw error;
+          }
+        }
+      } catch (error) {
+        throw error;
+      }
+    },
+    [router],
+  );
 
   return (
     <>
@@ -62,20 +160,26 @@ function SignInModalContent() {
 
       <Modal.TextContent>
         <p>Sign in to your account to continue</p>
+        {error !== null && <p className={styles.error}>{error}</p>}
+        <form action="/api/auth/signin" onSubmit={handleSubmit} className={styles.form}>
+          {inputs.map(input => (
+            <Fragment key={input}>
+              <label htmlFor={input}>{InputDisplayNames[input]}</label>
+              <input
+                type={InputHtmlTypes[input]}
+                id={input}
+                name={input}
+                onChange={() => setError(null)}
+              />
+            </Fragment>
+          ))}
 
-        <form action="/api/auth/signin" method="post" className={styles.form}>
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" name="email" />
-
-          <label htmlFor="password">Password</label>
-          <input type="password" id="password" name="password" />
-
-          <div className={styles.buttonGroup}>
+          <ButtonGroup>
             <Button type="submit">Sign In</Button>
             <Button type="button" disabled>
               Forgot Password
             </Button>
-          </div>
+          </ButtonGroup>
         </form>
       </Modal.TextContent>
 
@@ -95,6 +199,9 @@ const ModalContent: Record<NonNullable<AuthContext>, ReactNode> = {
 
 export function AuthModals() {
   const { currentContext, setCurrentContext } = useAuthModalContext();
+
+  // keep track of previous non-null context so that we can render the previous modal while
+  // fading out the modal
   const prevContext: NonNullable<AuthContext> = useMemoComparison(
     () => currentContext!,
     [currentContext],

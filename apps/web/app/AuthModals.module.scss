@@ -6,8 +6,8 @@
   gap: 0.5rem;
 }
 
-.buttonGroup {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
+.error {
+  color: #ff7878;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
 }

@@ -9,7 +9,6 @@ const log = getLogger(__filename);
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
-  const requestUrl = new URL(request.url);
   const formData = await request.formData();
   const email = String(formData.get("email"));
   const password = String(formData.get("password"));
@@ -22,23 +21,16 @@ export async function POST(request: Request) {
     });
 
     if (res.error) {
-      log.error("Error logging in: ", res.error);
-      return NextResponse.redirect("/500", {
-        status: 500,
-        statusText: res.error.message,
-      });
+      log.error("Error logging in: ", res.error.message);
+      return NextResponse.json({ error: res.error.message }, { status: res.error.status });
     }
 
     const user = res.data.user;
     log.debug("User logged in: ", user);
   } catch (error) {
     log.error("Error logging in: ", error);
-    return NextResponse.redirect("/500", {
-      status: 500,
-    });
+    return NextResponse.error();
   }
 
-  return NextResponse.redirect(requestUrl.origin, {
-    status: 301,
-  });
+  return NextResponse.json({ errors: null, success: true }, { status: 200 });
 }

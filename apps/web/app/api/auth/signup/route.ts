@@ -6,6 +6,7 @@ import { getLogger } from "logging";
 const log = getLogger(__filename);
 
 import type { Database } from "@/lib/database.types";
+import { Input } from "app/AuthModals";
 
 export const dynamic = "force-dynamic";
 
@@ -16,13 +17,31 @@ export async function POST(request: Request) {
   const password = String(formData.get("password"));
   const password2 = String(formData.get("confirmPassword"));
   const supabase = createRouteHandlerClient<Database>({ cookies });
+  const errors: Record<Input, string | null> = {
+    email: null,
+    password: null,
+    confirmPassword: null,
+  };
 
   if (password !== password2) {
-    return NextResponse.error()
+    errors.password = "Passwords do not match";
+    errors.confirmPassword = "Passwords do not match";
+  }
+
+  if (password.length < 8 || password.length > 64) {
+    errors.password = "Password must be between 8-64 characters";
+  }
+
+  if (email.match(/.+@.+\..+/) === null) {
+    errors.email = "Please enter a valid email address";
+  }
+
+  if (Object.values(errors).some(error => error !== null)) {
+    return NextResponse.json({ errors }, { status: 400 });
   }
 
   try {
-    const res = await supabase.auth.signUp({
+    const authRes = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -30,33 +49,22 @@ export async function POST(request: Request) {
       },
     });
 
-    if (res.error) {
-      log.error("Error signing up user: ", res.error);
-      return NextResponse.redirect("/500", {
-        status: 500,
-        statusText: res.error.message,
-      });
+    if (authRes.error) {
+      log.error("Error signing up user: ", authRes.error);
+      return NextResponse.error();
     }
 
-    const user = res.data.user ?? res.data.session?.user;
+    const user = authRes.data.user ?? authRes.data.session?.user;
     if (!user) {
-      const msg = "No session or user returned";
-      log.error("Something went wrong during signup, please try again: ", msg);
-      return NextResponse.redirect("/500", {
-        status: 500,
-        statusText: msg,
-      });
+      log.error("Something went wrong during signup: No session or user returned");
+      return NextResponse.error();
     }
 
     log.debug("Signed up user: ", user);
   } catch (error) {
     log.error(error);
-    return NextResponse.redirect(requestUrl.origin, {
-      status: 500,
-    });
+    return NextResponse.error();
   }
 
-  return NextResponse.redirect(requestUrl.origin, {
-    status: 301,
-  });
+  return NextResponse.json({ errors: null, success: true }, { status: 200 });
 }
