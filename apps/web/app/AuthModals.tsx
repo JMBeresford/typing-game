@@ -25,15 +25,15 @@ function SignUpModalContent() {
       <Modal.TextContent>
         <p>Sign up for an account to continue</p>
 
-        <form action="/auth/sign-up" method="post" className={styles.form}>
+        <form action="/api/auth/signup" method="post" className={styles.form}>
           <label htmlFor="email">Email</label>
-          <input type="email" id="email" />
+          <input type="email" id="email" name="email" />
 
           <label htmlFor="password">Password</label>
-          <input type="password" id="password" />
+          <input type="password" id="password" name="password" />
 
           <label htmlFor="confirmPassword">Confirm Password</label>
-          <input type="password" id="confirmPassword" />
+          <input type="password" id="confirmPassword" name="confirmPassword" />
 
           <div className={styles.buttonGroup}>
             <Button type="submit">Sign Up</Button>
@@ -63,12 +63,12 @@ function SignInModalContent() {
       <Modal.TextContent>
         <p>Sign in to your account to continue</p>
 
-        <form action="/auth/sign-in" method="post" className={styles.form}>
+        <form action="/api/auth/signin" method="post" className={styles.form}>
           <label htmlFor="email">Email</label>
-          <input type="email" id="email" />
+          <input type="email" id="email" name="email" />
 
           <label htmlFor="password">Password</label>
-          <input type="password" id="password" />
+          <input type="password" id="password" name="password" />
 
           <div className={styles.buttonGroup}>
             <Button type="submit">Sign In</Button>

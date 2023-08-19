@@ -1,6 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
+  "globalDotEnv": [".env.local", ".env"],
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
@@ -10,8 +10,11 @@
     "format": {},
     "dev": {
       "cache": false,
-      "persistent": true,
-      "dotEnv": [".env.development.local", ".env.local", ".env.development", ".env"]
+      "persistent": true
+    },
+    "web#dev": {
+      "dotEnv": [".env.local"],
+      "env": ["NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_ANON_KEY"]
     }
   },
   "globalEnv": ["NODE_ENV"]
