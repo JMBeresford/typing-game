@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { Header, Nav } from "ui";
-import { AuthContext, AuthModalContext, AuthModals } from "./AuthModals";
+import { AuthContext, AuthModalContext, AuthModals } from "./_modals/AuthModals";
 import { Session } from "@supabase/auth-helpers-nextjs";
+import { API_PATH } from "./api/urls";
 
 function NavSignedIn() {
   return (
@@ -11,8 +12,8 @@ function NavSignedIn() {
       <Nav.Item itemType="link" href="/profile">
         My Profile
       </Nav.Item>
-      <form>
-        <Nav.Item itemType="button" formAction={"/api/auth/signout"} formMethod="POST">
+      <form action={`${API_PATH}/auth/signout`} method="post">
+        <Nav.Item itemType="button" type="submit">
           Sign Out
         </Nav.Item>
       </form>

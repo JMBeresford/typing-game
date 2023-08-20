@@ -11,6 +11,7 @@ import { Button, ButtonGroup, Modal } from "ui";
 import styles from "./AuthModals.module.scss";
 import { useMemoComparison } from "@/hooks/useMemoComparison";
 import { useRouter } from "next/navigation";
+import { Input, SignInInput, SignUpInput, handleSignIn, handleSignUp } from "./utils/auth";
 
 export type AuthContext = "signUp" | "signIn" | null;
 export type AuthModalContext = {
@@ -24,8 +25,6 @@ export const AuthModalContext = createContext<AuthModalContext>({
 });
 export const useAuthModalContext = () => useContext(AuthModalContext);
 
-export const Input = ["email", "password", "confirmPassword"] as const;
-export type Input = typeof Input[number];
 const InputDisplayNames: Record<Input, string> = {
   email: "Email",
   password: "Password",
@@ -39,42 +38,34 @@ const InputHtmlTypes: Record<Input, HTMLInputElement["type"]> = {
 
 function SignUpModalContent() {
   const { setCurrentContext } = useAuthModalContext();
+  const router = useRouter();
   const [errors, setErrors] = useState<Record<Input, string | null>>({
     email: null,
     password: null,
     confirmPassword: null,
   });
-  const router = useRouter();
 
   const handleSubmit = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
+      const status = await handleSignUp(formData);
 
-      try {
-        const response = await fetch(event.currentTarget.action, {
-          method: "POST",
-          body: formData,
-        });
-
-        if (response.ok) {
-          window.alert("Account created successfully! Check your email for verification.");
-          router.refresh();
-        } else {
-          try {
-            const data = await response.json();
-            if (data.errors) {
-              setErrors(data.errors);
-            }
-          } catch (error) {
-            throw error;
-          }
-        }
-      } catch (error) {
-        throw error;
+      if (status.validationErrors) {
+        setErrors(status.validationErrors);
+        return;
       }
+
+      if (status.error) {
+        window.alert(`Something went wrong during sign-up: ${status.error}`);
+        return;
+      }
+
+      router.push("/?auth=confirmEmail");
+      setCurrentContext(null);
+      router.refresh();
     },
-    [router],
+    [router, setCurrentContext],
   );
 
   return (
@@ -84,8 +75,8 @@ function SignUpModalContent() {
       <Modal.TextContent>
         <p>Sign up for an account to continue</p>
 
-        <form action="api/auth/signup" onSubmit={handleSubmit} className={styles.form}>
-          {Input.map(input => (
+        <form onSubmit={handleSubmit} className={styles.form}>
+          {Object.values(SignUpInput).map(input => (
             <Fragment key={input}>
               <label htmlFor={input}>{InputDisplayNames[input]}</label>
               {errors[input] !== null && <p className={styles.error}>{errors[input]}</p>}
@@ -118,7 +109,6 @@ function SignUpModalContent() {
 
 function SignInModalContent() {
   const { setCurrentContext } = useAuthModalContext();
-  const inputs = ["email", "password"] as const;
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -127,29 +117,15 @@ function SignInModalContent() {
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
 
-      try {
-        const response = await fetch(event.currentTarget.action, {
-          method: "POST",
-          body: formData,
-        });
+      const authStatus = await handleSignIn(formData);
 
-        if (response.ok) {
-          router.refresh();
-        }
-
-        if (response.status === 400) {
-          try {
-            const data = await response.json();
-            if (data.error) {
-              setError(data.error);
-            }
-          } catch (error) {
-            throw error;
-          }
-        }
-      } catch (error) {
-        throw error;
+      if (authStatus.error) {
+        setError(authStatus.error.message ?? "Something went wrong, please try again later.");
+        return;
       }
+
+      router.push("/");
+      router.refresh();
     },
     [router],
   );
@@ -161,8 +137,8 @@ function SignInModalContent() {
       <Modal.TextContent>
         <p>Sign in to your account to continue</p>
         {error !== null && <p className={styles.error}>{error}</p>}
-        <form action="/api/auth/signin" onSubmit={handleSubmit} className={styles.form}>
-          {inputs.map(input => (
+        <form onSubmit={handleSubmit} className={styles.form}>
+          {Object.values(SignInInput).map(input => (
             <Fragment key={input}>
               <label htmlFor={input}>{InputDisplayNames[input]}</label>
               <input

@@ -22,15 +22,15 @@ export async function POST(request: Request) {
 
     if (res.error) {
       log.error("Error logging in: ", res.error.message);
-      return NextResponse.json({ error: res.error.message }, { status: res.error.status });
+      return NextResponse.json({ error: res.error }, { status: res.error.status });
     }
 
     const user = res.data.user;
     log.debug("User logged in: ", user);
   } catch (error) {
     log.error("Error logging in: ", error);
-    return NextResponse.error();
+    return NextResponse.json({ error: `${error}` }, { status: 500 });
   }
 
-  return NextResponse.json({ errors: null, success: true }, { status: 200 });
+  return NextResponse.json({ error: null }, { status: 200 });
 }
