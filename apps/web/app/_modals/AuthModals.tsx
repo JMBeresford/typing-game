@@ -7,8 +7,7 @@ import {
   useContext,
   useState,
 } from "react";
-import { Button, ButtonGroup, Modal } from "ui";
-import styles from "./AuthModals.module.scss";
+import { Button, ButtonGroup, Form, Modal } from "ui";
 import { useMemoComparison } from "@/hooks/useMemoComparison";
 import { useRouter } from "next/navigation";
 import { Input, SignInInput, SignUpInput, handleSignIn, handleSignUp } from "./utils/auth";
@@ -38,71 +37,82 @@ const InputHtmlTypes: Record<Input, HTMLInputElement["type"]> = {
 
 function SignUpModalContent() {
   const { setCurrentContext } = useAuthModalContext();
-  const router = useRouter();
+  const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<Input, string | null>>({
     email: null,
     password: null,
     confirmPassword: null,
   });
 
-  const handleSubmit = useCallback(
-    async (event: FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      const formData = new FormData(event.currentTarget);
-      const status = await handleSignUp(formData);
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const status = await handleSignUp(formData);
 
-      if (status.validationErrors) {
-        setErrors(status.validationErrors);
-        return;
-      }
+    if (status.validationErrors) {
+      setErrors(status.validationErrors);
+      return;
+    }
 
-      if (status.error) {
-        window.alert(`Something went wrong during sign-up: ${status.error}`);
-        return;
-      }
+    if (status.error) {
+      window.alert(`Something went wrong during sign-up: ${status.error}`);
+      return;
+    }
 
-      router.push("/?auth=confirmEmail");
-      setCurrentContext(null);
-      router.refresh();
-    },
-    [router, setCurrentContext],
-  );
+    setSuccess(true);
+  };
 
   return (
     <>
       <Modal.Header>Sign Up</Modal.Header>
 
-      <Modal.TextContent>
-        <p>Sign up for an account to continue</p>
+      {success ? (
+        <>
+          <Modal.TextContent>
+            <p>Success! Please verify your email and then sign in. </p>
+          </Modal.TextContent>
 
-        <form onSubmit={handleSubmit} className={styles.form}>
-          {Object.values(SignUpInput).map(input => (
-            <Fragment key={input}>
-              <label htmlFor={input}>{InputDisplayNames[input]}</label>
-              {errors[input] !== null && <p className={styles.error}>{errors[input]}</p>}
-              <input
-                type={InputHtmlTypes[input]}
-                id={input}
-                name={input}
-                onChange={() => setErrors(prev => ({ ...prev, [input]: null }))}
-              />
-            </Fragment>
-          ))}
-
-          <ButtonGroup>
-            <Button type="submit">Sign Up</Button>
-            <Button type="button" disabled>
-              Forgot Password
+          <Modal.Footer>
+            <Button size="small" onClick={() => setCurrentContext("signIn")}>
+              Sign In
             </Button>
-          </ButtonGroup>
-        </form>
-      </Modal.TextContent>
+          </Modal.Footer>
+        </>
+      ) : (
+        <>
+          <Modal.TextContent>
+            <p>Sign up for an account to continue</p>
 
-      <Modal.Footer>
-        <Button size="small" onClick={() => setCurrentContext("signIn")}>
-          Already have an account?
-        </Button>
-      </Modal.Footer>
+            <Form onSubmit={handleSubmit}>
+              {Object.values(SignUpInput).map(input => (
+                <Fragment key={input}>
+                  <label htmlFor={input}>{InputDisplayNames[input]}</label>
+                  {errors[input] !== null && <Form.Error>{errors[input]}</Form.Error>}
+                  <input
+                    type={InputHtmlTypes[input]}
+                    id={input}
+                    name={input}
+                    onChange={() => setErrors(prev => ({ ...prev, [input]: null }))}
+                  />
+                </Fragment>
+              ))}
+
+              <ButtonGroup>
+                <Button type="submit">Sign Up</Button>
+                <Button type="button" disabled>
+                  Forgot Password
+                </Button>
+              </ButtonGroup>
+            </Form>
+          </Modal.TextContent>
+
+          <Modal.Footer>
+            <Button size="small" onClick={() => setCurrentContext("signIn")}>
+              Already have an account?
+            </Button>
+          </Modal.Footer>
+        </>
+      )}
     </>
   );
 }
@@ -136,8 +146,8 @@ function SignInModalContent() {
 
       <Modal.TextContent>
         <p>Sign in to your account to continue</p>
-        {error !== null && <p className={styles.error}>{error}</p>}
-        <form onSubmit={handleSubmit} className={styles.form}>
+        {error !== null && <Form.Error>{error}</Form.Error>}
+        <Form onSubmit={handleSubmit}>
           {Object.values(SignInInput).map(input => (
             <Fragment key={input}>
               <label htmlFor={input}>{InputDisplayNames[input]}</label>
@@ -156,7 +166,7 @@ function SignInModalContent() {
               Forgot Password
             </Button>
           </ButtonGroup>
-        </form>
+        </Form>
       </Modal.TextContent>
 
       <Modal.Footer>

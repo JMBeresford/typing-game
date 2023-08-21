@@ -15,6 +15,10 @@
     "web#dev": {
       "dotEnv": [".env.local"],
       "env": ["NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_ANON_KEY"]
+    },
+    "generate-db-types": {
+      "dotEnv": [".env.local"],
+      "env": ["SUPABASE_PROJECT_ID"]
     }
   },
   "globalEnv": ["NODE_ENV"]

@@ -4,6 +4,7 @@ import { HomeHeader } from "./HomeHeader";
 import { cookies } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import type { Database } from "@/lib/database.types";
+import { FirstLoginModal } from "./_modals/FirstLoginModal";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,7 @@ export default async function Page() {
     <>
       <div className={styles.wrapper}>
         <HomeHeader session={session} />
+        <FirstLoginModal session={session} />
 
         <main className={styles.mainMenu}>
           <Button>

@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --max-warnings=0",
-    "format": "prettier --write \"app/**/*.{ts,tsx,md,js,json,scss,css}\""
+    "format": "prettier --write \"app/**/*.{ts,tsx,md,js,json,scss,css}\"",
+    "generate-db-types": "source .env.local && supabase gen types typescript --project-id $SUPABASE_PROJECT_ID > ./src/lib/database.types.ts"
   },
   "dependencies": {
     "@react-spring/three": "^9.7.3",

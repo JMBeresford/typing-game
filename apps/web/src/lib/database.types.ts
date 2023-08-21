@@ -11,14 +11,17 @@ export interface Database {
     Tables: {
       profiles: {
         Row: {
+          email: string | null
           id: string
           username: string | null
         }
         Insert: {
+          email?: string | null
           id: string
           username?: string | null
         }
         Update: {
+          email?: string | null
           id?: string
           username?: string | null
         }
