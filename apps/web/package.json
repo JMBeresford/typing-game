@@ -7,12 +7,15 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --max-warnings=0",
-    "format": "prettier --write \"app/**/*.{ts,tsx,md,js,json,scss,css}\""
+    "format": "prettier --write \"app/**/*.{ts,tsx,md,js,json,scss,css}\"",
+    "generate-db-types": "source .env.local && supabase gen types typescript --project-id $SUPABASE_PROJECT_ID > ./src/lib/database.types.ts"
   },
   "dependencies": {
     "@react-spring/three": "^9.7.3",
     "@react-three/drei": "^9.78.2",
     "@react-three/fiber": "^8.13.5",
+    "@supabase/auth-helpers-nextjs": "^0.7.4",
+    "@supabase/supabase-js": "^2.32.0",
     "glslify-loader": "^2.0.0",
     "immer": "^10.0.2",
     "logging": "workspace:*",
@@ -33,6 +36,7 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@types/three": "0.154.0",
+    "encoding": "^0.1.13",
     "eslint-config-custom": "workspace:*",
     "tsconfig": "workspace:*",
     "typescript": "^5.1.6"

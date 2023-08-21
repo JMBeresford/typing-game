@@ -3,14 +3,18 @@ import styles from "./Button.module.scss";
 import { ButtonLink } from "./ButtonLink";
 
 type ButtonProps = {
-  type?: "primary" | "secondary";
+  priority?: "primary" | "secondary";
   size?: "small" | "medium" | "large";
   children: ReactNode;
-} & Omit<JSX.IntrinsicElements["button"], "type">;
+} & JSX.IntrinsicElements["button"];
 
-function Button({ type = "primary", size = "medium", children, ...props }: ButtonProps) {
+function Button({ priority = "primary", size = "medium", children, ...props }: ButtonProps) {
   return (
-    <button type="button" className={`${styles.button} ${styles[type]} ${styles[size]}`} {...props}>
+    <button
+      type="button"
+      className={`${styles.button} ${styles[priority]} ${styles[size]}`}
+      {...props}
+    >
       {children}
     </button>
   );

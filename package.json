@@ -15,13 +15,14 @@
     "@semantic-release/npm": "10.0.4",
     "@semantic-release/release-notes-generator": "11.0.4",
     "@turbo/gen": "^1.9.7",
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "dotenv-cli": "^7.2.1",
     "eslint": "^8.44.0",
     "eslint-config-custom": "workspace:*",
     "prettier": "^2.5.1",
     "semantic-release": "^21.0.7",
-    "turbo": "latest",
-    "commitizen": "^4.3.0",
-    "cz-conventional-changelog": "^3.3.0"
+    "turbo": "latest"
   },
   "packageManager": "pnpm@8.6.6",
   "name": "typing-game",

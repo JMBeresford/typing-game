@@ -22,10 +22,10 @@ $header-footer-margin: 1.25rem;
 }
 
 .modal {
+  position: relative;
   background-color: rgb(61, 61, 61);
   border-radius: 10px;
-  min-width: 300px;
-  max-width: 600px;
+  max-width: 65ch;
   padding: 1rem 1.5rem;
   color: white;
 
@@ -56,7 +56,6 @@ $header-footer-margin: 1.25rem;
 .textContent {
   width: 100%;
   font-size: 1rem;
-  max-width: 65ch;
 }
 
 .footer {
