@@ -8,9 +8,9 @@ function HeaderTitle({ children, ...props }: JSX.IntrinsicElements["h1"]) {
   );
 }
 
-function Header({ children, ...props }: JSX.IntrinsicElements["header"]) {
+function Header({ children, className, ...props }: JSX.IntrinsicElements["header"]) {
   return (
-    <header className={styles.header} {...props}>
+    <header className={`${styles.header} ${className}`} {...props}>
       {children}
     </header>
   );

@@ -1,3 +1,35 @@
 .table {
   width: 100%;
+  border-spacing: 0;
+
+  thead {
+    tr {
+      background-color: #00000035;
+    }
+  }
+
+  tbody {
+    tr {
+      background-color: #ffffff10;
+    }
+
+    tr:nth-child(odd) {
+      background-color: #ffffff20;
+    }
+  }
+
+  th,
+  td {
+    margin: 0;
+    padding: 0.5rem 0.25rem;
+    border: none;
+
+    &:first-child {
+      padding-left: 1rem;
+    }
+
+    &:last-child {
+      padding-right: 1rem;
+    }
+  }
 }

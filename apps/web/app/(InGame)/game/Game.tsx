@@ -5,7 +5,7 @@ import styles from "./Game.module.scss";
 import { Systems } from "@/ECS/systems";
 import { Entities } from "@/ECS/entities";
 import { Stats } from "@react-three/drei";
-import { WaveIndicator } from "../../src/components/Renderables/WaveIndicator";
+import { WaveIndicator } from "../../../src/components/Renderables/WaveIndicator";
 import { GameOverScreen } from "./GameOverScreen";
 import { ScenePortal } from "@/components/ScenePortal";
 import { useStore } from "@/state";

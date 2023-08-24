@@ -14,14 +14,23 @@ function TableBody(props: { children: ReactNode }) {
 }
 
 function TableHeader(props: { children: ReactNode }) {
+  return <thead>{props.children}</thead>;
+}
+
+function TableHeaderData(props: { children: ReactNode }) {
   return <th>{props.children}</th>;
 }
 
-function Table(props: { children: ReactNode }) {
-  return <table className={styles.table}>{props.children}</table>;
+function Table({ children, className, ...props }: JSX.IntrinsicElements["table"]) {
+  return (
+    <table className={`${styles.table} ${className}`} {...props}>
+      {children}
+    </table>
+  );
 }
 
 Table.Header = TableHeader;
+Table.HeaderData = TableHeaderData;
 Table.Body = TableBody;
 Table.Row = TableRow;
 Table.Data = TableData;

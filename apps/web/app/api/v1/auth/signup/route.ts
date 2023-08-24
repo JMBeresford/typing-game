@@ -6,7 +6,7 @@ import { getLogger } from "logging";
 const log = getLogger(__filename);
 
 import type { Database } from "@/lib/database.types";
-import { ValidationErrors } from "app/_modals/utils/auth";
+import { ValidationErrors } from "app/(OutOfGame)/_modals/utils/auth";
 
 export const dynamic = "force-dynamic";
 

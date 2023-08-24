@@ -1,0 +1,15 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  color: white;
+}
+
+#sharedRootLayout {
+  width: 100%;
+  max-width: min(90%, 1500px);
+  margin: 0 auto;
+}
