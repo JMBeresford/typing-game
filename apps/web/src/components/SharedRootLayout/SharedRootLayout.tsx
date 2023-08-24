@@ -1,14 +1,16 @@
 import { ScenePortal } from "@/components/ScenePortal";
 import { SceneRoot } from "@/components/SceneRoot";
 import { Suspense } from "react";
-import "./layout.scss";
+import "./SharedRootLayout.scss";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export function SharedRootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
         <SceneRoot>
-          <Suspense fallback={null}>{children}</Suspense>
+          <Suspense fallback={null}>
+            <div id="sharedRootLayout">{children}</div>
+          </Suspense>
         </SceneRoot>
 
         <ScenePortal>

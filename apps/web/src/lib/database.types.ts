@@ -9,6 +9,52 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      games_played: {
+        Row: {
+          accuracy: number
+          created_at: string
+          enemies_killed: number
+          id: string
+          score: number
+          time_elapsed_ms: number
+          times_hit: number
+          user_id: string | null
+          waves_completed: number
+          words_per_minute: number
+        }
+        Insert: {
+          accuracy?: number
+          created_at?: string
+          enemies_killed?: number
+          id?: string
+          score?: number
+          time_elapsed_ms?: number
+          times_hit?: number
+          user_id?: string | null
+          waves_completed?: number
+          words_per_minute?: number
+        }
+        Update: {
+          accuracy?: number
+          created_at?: string
+          enemies_killed?: number
+          id?: string
+          score?: number
+          time_elapsed_ms?: number
+          times_hit?: number
+          user_id?: string | null
+          waves_completed?: number
+          words_per_minute?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "games_played_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       profiles: {
         Row: {
           email: string | null

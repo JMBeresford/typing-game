@@ -15,6 +15,7 @@ export function GameOverScreen() {
   const curWaveStarted = useStore(state => state.wave.startTime);
   const curWaveEnded = useStore(state => state.wave.endTime);
   const getElapsedTime = useStore(state => state.clock.getElapsedTime);
+
   const numEnemiesKilled = useMemo(
     () =>
       finishedWaves.reduce((acc, wave) => acc + wave.numEnemies, 0) +
