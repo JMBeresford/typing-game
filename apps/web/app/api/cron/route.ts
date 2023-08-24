@@ -11,8 +11,9 @@ export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 export async function GET(_request: NextRequest) {
-  const supabase = createRouteHandlerClient<Database>({ cookies });
-  const { data, error, status } = await supabase.from("profiles").select();
+  const cookieStore = cookies();
+  const supabase = createRouteHandlerClient<Database>({ cookies: () => cookieStore });
+  const { data, error, status } = await supabase.from("profiles").select().single();
 
   return NextResponse.json(
     { data, error },
