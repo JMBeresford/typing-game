@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 export async function GET(_request: NextRequest) {
   const cookieStore = cookies();
   const supabase = createRouteHandlerClient<Database>({ cookies: () => cookieStore });
-  const { data, error, status } = await supabase.from("profiles").select().single();
+  const { data, error, status } = await supabase.from("profiles").select().limit(1).single();
 
   return NextResponse.json(
     { data, error },
