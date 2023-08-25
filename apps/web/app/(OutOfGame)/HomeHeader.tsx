@@ -3,15 +3,15 @@
 import { useState } from "react";
 import { Header, Nav } from "ui";
 import { AuthContext, AuthModalContext, AuthModals } from "./_modals/AuthModals";
-import { Session } from "@supabase/auth-helpers-nextjs";
 import { API_PATH } from "../api/urls";
 import styles from "./HomeHeader.module.scss";
 import Link from "next/link";
+import { Tables } from "@/lib/tables.types";
 
-function NavSignedIn({ session }: { session: Session }) {
+function NavSignedIn({ profile }: { profile: Tables<"profiles"> }) {
   return (
     <Nav>
-      <Nav.Item itemType="link" href={`/profile/${session.user.id}`}>
+      <Nav.Item itemType="link" href={`/profile/${profile.username ?? profile.id}`}>
         My Profile
       </Nav.Item>
       <form action={`${API_PATH}/auth/signout`} method="post">
@@ -44,8 +44,8 @@ function NavSignedOut() {
   );
 }
 
-export function HomeHeader(props: { session: Session | null }) {
-  const { session } = props;
+export function HomeHeader(props: { profile: Tables<"profiles"> | null }) {
+  const { profile } = props;
 
   return (
     <Header className={styles.header}>
@@ -53,7 +53,7 @@ export function HomeHeader(props: { session: Session | null }) {
         <Link href="/">Typing Game</Link>
       </Header.Title>
 
-      {session ? <NavSignedIn session={session} /> : <NavSignedOut />}
+      {profile ? <NavSignedIn profile={profile} /> : <NavSignedOut />}
     </Header>
   );
 }

@@ -3,13 +3,15 @@ import { RenderEnemy } from "./renderables/RenderEnemy";
 import { Entity } from "./entities";
 import { ECS } from ".";
 import { getLogger } from "logging";
-import { TargetableEnemy } from "@/utils";
+import { TargetableEnemy } from "./utils";
 import { randFloat } from "three/src/math/MathUtils";
+import { useStore } from "@/state";
 
 const log = getLogger(__filename);
 const STARTING_SHIELDS = 1;
 
 const isPlayer = ECS.world.with("typedCharacters");
+const isTargetableEnemy = ECS.world.with("targetWord", "shields").without("destroy");
 
 export function spawnEnemy(components: Partial<Entity>): Entity {
   const high = 15;
@@ -47,10 +49,45 @@ export function targetEnemy(enemy: TargetableEnemy | null) {
   }
 }
 
+export function maybeTargetEnemy(chars: string): TargetableEnemy | null {
+  const player = isPlayer.first;
+  if (!player) return null;
+
+  if (player.targetedEnemy === null && chars.length > 0) {
+    for (const enemy of isTargetableEnemy) {
+      if (enemy.targetWord.startsWith(chars)) {
+        targetEnemy(enemy);
+        return enemy;
+      }
+    }
+  } else if (player.targetedEnemy !== null && chars.length === 0) {
+    targetEnemy(null);
+  }
+
+  return player.targetedEnemy ?? null;
+}
+
 export const setTypedCharacters = (typedCharacters: string) => {
   const player = isPlayer.first;
 
   if (player) {
+    const characterWasTyped = useStore.getState().gameStats.characterWasTyped;
+    const characterWasMissed = useStore.getState().gameStats.characterWasMissed;
+    const targetedEnemy = maybeTargetEnemy(typedCharacters);
+    const isBackspacing = typedCharacters.length < player.typedCharacters.length;
+
+    if (!isBackspacing) {
+      characterWasTyped();
+    }
+
+    if (targetedEnemy) {
+      const targetWord = targetedEnemy.targetWord;
+
+      if (!isBackspacing && typedCharacters !== targetWord.slice(0, typedCharacters.length)) {
+        characterWasMissed();
+      }
+    }
+
     ECS.world.removeComponent(player, "typedCharacters");
     ECS.world.addComponent(player, "typedCharacters", typedCharacters);
   }

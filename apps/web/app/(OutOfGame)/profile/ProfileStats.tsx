@@ -2,6 +2,7 @@ import { Tables } from "@/lib/tables.types";
 import styles from "./Profile.module.scss";
 
 function average(arr: number[]) {
+  if (arr.length === 0) return 0;
   return arr.reduce((acc, val) => acc + val, 0) / arr.length;
 }
 

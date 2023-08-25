@@ -1,3 +1,5 @@
+"use client";
+
 import createECS from "miniplex-react";
 import { World } from "miniplex";
 import { Entity } from "./entities";
