@@ -2,6 +2,7 @@ import { StateCreator } from "zustand";
 import { GlobalState } from ".";
 import { getLogger } from "logging";
 import { ECS } from "@/ECS";
+import { API_PATH } from "app/api/urls";
 
 const log = getLogger(__filename);
 
@@ -12,14 +13,13 @@ type Wave = {
   numEnemies: number;
 };
 
-type FinishedWave = Required<Wave>;
+export type FinishedWave = Required<Wave>;
 
 type InternalWaveState = {
   phase: "preparing" | "wave" | "game over";
 
   // Time between waves in *milliseconds*
   timeBetweenWaves: number;
-  finishedWaves: FinishedWave[];
 };
 
 type WaveActions = {
@@ -69,7 +69,7 @@ export const createWaveState: StateCreator<
       state.wave.endTime = endTime;
       state.wave.phase = "preparing";
 
-      state.wave.finishedWaves.push({
+      state.gameStats.finishedWaves.push({
         startTime: state.wave.startTime,
         endTime: endTime,
         waveNumber: state.wave.waveNumber,
@@ -79,6 +79,13 @@ export const createWaveState: StateCreator<
   },
   getNumEnemies: () => _get().wave.numEnemies,
   gameOver: () => {
+    const stats = _get().gameStats.getStats();
+
+    fetch(`${API_PATH}/game/record-stats`, {
+      method: "POST",
+      body: JSON.stringify(stats),
+    });
+
     _set(state => {
       state.wave.endTime = _get().clock.getElapsedTime();
       state.wave.phase = "game over";
@@ -111,7 +118,6 @@ export const createWaveState: StateCreator<
       numEnemies: 0,
       phase: "preparing",
       timeBetweenWaves: 5,
-      finishedWaves: [],
     };
 
     _set(state => {

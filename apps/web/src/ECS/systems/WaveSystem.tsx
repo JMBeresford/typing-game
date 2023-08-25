@@ -2,7 +2,7 @@ import { useEntities } from "miniplex-react";
 import { ECS } from "..";
 import { useFrame } from "@react-three/fiber";
 import { spawnEnemy } from "../actions";
-import { generateWord } from "@/utils";
+import { generateWord } from "../utils";
 import { useStore } from "@/state";
 
 const withTargetWord = ECS.world.with("targetWord");

@@ -2,7 +2,7 @@ import { Player } from "./Player";
 import { Object3D } from "three";
 import { ReactNode } from "react";
 import { Enemies } from "./Enemies";
-import { TargetableEnemy } from "@/utils";
+import { TargetableEnemy } from "../utils";
 
 export type Entity = {
   shields?: {

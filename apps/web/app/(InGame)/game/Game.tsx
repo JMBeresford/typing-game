@@ -20,10 +20,12 @@ export function Game({ children }: Props) {
   useLayoutEffect(() => {
     log.debug("Starting game");
     useStore.getState().wave.reset();
+    useStore.getState().gameStats.reset();
 
     return () => {
       log.debug("Stopping game");
       useStore.getState().wave.reset();
+      useStore.getState().gameStats.reset();
     };
   }, []);
 

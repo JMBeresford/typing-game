@@ -15,10 +15,17 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     data: { session },
   } = await supabase.auth.getSession();
 
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", session?.user.id)
+    .limit(1)
+    .single();
+
   return (
     <SharedRootLayout>
       <FirstLoginModal session={session} />
-      <HomeHeader session={session} />
+      <HomeHeader profile={profile} />
 
       <main className={styles.main}>{children}</main>
     </SharedRootLayout>

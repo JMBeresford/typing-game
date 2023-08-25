@@ -8,7 +8,9 @@ import { GamesPlayed } from "../GamesPlayed";
 import { redirect } from "next/navigation";
 
 export default async function Profile({ params }: { params: { id: string } }) {
-  const { id } = params;
+  let { id } = params;
+  id = decodeURI(id);
+
   const supabase = createServerComponentClient<Database>({ cookies });
   const profileById = await supabase
     .from("profiles")
