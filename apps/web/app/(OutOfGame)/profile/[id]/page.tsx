@@ -43,7 +43,7 @@ export default async function Profile({ params }: { params: { id: string } }) {
   return (
     <div className={styles.profile}>
       <ProfileBanner profile={profile} />
-      <ProfileStats profile={profile} games={games} />
+      <ProfileStats profile={profile} />
       <GamesPlayed games={games} />
     </div>
   );
