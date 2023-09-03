@@ -14,3 +14,9 @@ export function secElapsedToTime(_secs: number): Time {
   const mins = Math.floor(secs / 60);
   return { mins, secs: secs % 60 };
 }
+
+export function recordToIter<K extends string | number | symbol, V>(
+  record: Record<K, V>,
+): [K, V][] {
+  return Object.entries(record) as [K, V][];
+}

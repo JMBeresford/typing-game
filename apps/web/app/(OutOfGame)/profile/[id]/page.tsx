@@ -7,7 +7,7 @@ import { ProfileStats } from "../ProfileStats";
 import { GamesPlayed } from "../GamesPlayed";
 import { redirect } from "next/navigation";
 
-export default async function Profile({ params }: { params: { id: string } }) {
+export default async function ProfilePage({ params }: { params: { id: string } }) {
   let { id } = params;
   id = decodeURI(id);
 

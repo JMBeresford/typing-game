@@ -49,7 +49,7 @@ export function GamesPlayed({ games }: { games: Tables<"games_played">[] }) {
 
   return (
     <main className={styles.games}>
-      <Table style={{ textAlign: "left" }}>
+      <Table>
         <Table.Header>
           <Table.Row>
             {Object.values(displayNames).map(value => (

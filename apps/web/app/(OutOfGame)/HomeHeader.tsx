@@ -8,9 +8,23 @@ import styles from "./HomeHeader.module.scss";
 import Link from "next/link";
 import { Tables } from "@/lib/tables.types";
 
+function SharedHeaderItems() {
+  return (
+    <>
+      <Nav.Item itemType="link" href="/game">
+        Play
+      </Nav.Item>
+      <Nav.Item itemType="link" href="/leaderboard">
+        Leaderboard
+      </Nav.Item>
+    </>
+  );
+}
+
 function NavSignedIn({ profile }: { profile: Tables<"profiles"> }) {
   return (
     <Nav>
+      <SharedHeaderItems />
       <Nav.Item itemType="link" href={`/profile/${profile.username ?? profile.id}`}>
         My Profile
       </Nav.Item>
@@ -31,6 +45,7 @@ function NavSignedOut() {
       value={{ currentContext: modalContext, setCurrentContext: setModalContext }}
     >
       <Nav>
+        <SharedHeaderItems />
         <Nav.Item itemType="button" onClick={() => setModalContext("signIn")}>
           Sign In
         </Nav.Item>
