@@ -2,9 +2,26 @@ main.main {
   width: 100%;
 
   table {
-    th p {
+    .sortableColumnValue {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      justify-content: center;
       width: max-content;
       cursor: pointer;
+
+      p:last-child {
+        font-size: 0.5rem;
+      }
+    }
+
+    .selectedColumn {
+      color: #ff7a7a;
+    }
+
+    .ascending {
+      transform: rotate(180deg);
+      transform-origin: center;
     }
   }
 }
