@@ -4,15 +4,13 @@ import { TargetText } from "./TargetText";
 import { ECS } from "@/ECS";
 import { WeaponTimer } from "./WeaponTimer";
 import { RenderOrder } from "@/utils";
-import { ForwardedRef, forwardRef } from "react";
-import { Group } from "three";
 
-function RenderEnemyImpl(_: undefined, ref: ForwardedRef<Group>) {
+export function RenderEnemy() {
   const entity = ECS.useCurrentEntity();
   const [texture] = useMatcapTexture("27222B_677491_484F6A_5D657A");
 
   return (
-    <group ref={ref} renderOrder={RenderOrder.foreground}>
+    <group renderOrder={RenderOrder.foreground}>
       <mesh>
         <sphereGeometry args={[1, 32, 32]} />
         <meshMatcapMaterial matcap={texture} transparent />
@@ -25,5 +23,3 @@ function RenderEnemyImpl(_: undefined, ref: ForwardedRef<Group>) {
     </group>
   );
 }
-
-export const RenderEnemy = forwardRef(RenderEnemyImpl);
