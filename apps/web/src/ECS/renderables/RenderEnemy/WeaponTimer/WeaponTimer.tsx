@@ -24,7 +24,7 @@ export function WeaponTimer(props: JSX.IntrinsicElements["mesh"]) {
   return (
     <mesh ref={ref} {...props}>
       <planeGeometry args={[1, 0.2]} />
-      <meshBasicMaterial color="red" />
+      <meshBasicMaterial color="red" transparent />
     </mesh>
   );
 }

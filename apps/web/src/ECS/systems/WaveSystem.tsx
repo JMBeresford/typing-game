@@ -29,7 +29,7 @@ export function WaveSystem() {
           for (let i = 0; i < newEnemyCount; i++) {
             const word = generateWord();
 
-            spawnEnemy({ targetWord: word, staggerBy: i * 1.5, spawnedAt: elapsedTime });
+            spawnEnemy({ targetWord: word, staggerBy: (i + 1) * 1.5, spawnedAt: elapsedTime });
           }
         }
       } else if (phase === "wave") {
