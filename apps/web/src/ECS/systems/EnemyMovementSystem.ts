@@ -5,10 +5,11 @@ import { damp } from "three/src/math/MathUtils";
 import { useMaxHeight } from "@/hooks/useMaxHeight";
 import { useMaxWidth } from "@/hooks/useMaxWidth";
 import { useStore } from "@/state";
-import { useMemoComparison } from "@/hooks/useMemoComparison";
+import { Vector3 } from "three";
 
 const isEnemy = ECS.world.with("targetWord", "transform", "spawnedAt");
 const isPlayer = ECS.world.with("typedCharacters", "transform");
+const tempVec = new Vector3();
 
 export function EnemyMovementSystem() {
   const getElapsedTime = useStore(state => state.clock.getElapsedTime);
@@ -17,11 +18,6 @@ export function EnemyMovementSystem() {
   const { numEnemies } = useStore(state => state.wave);
   const maxHeight = useMaxHeight();
   const maxWidth = useMaxWidth();
-  const lookAt = useMemoComparison(
-    () => player?.transform.position,
-    [player],
-    (a, b) => b != undefined && a !== b,
-  );
 
   useFrame((_, dt) => {
     if (enemies.size <= 0) return;
@@ -42,10 +38,11 @@ export function EnemyMovementSystem() {
         enemy.transform.position.x = damp(enemy.transform.position.x, x, lambda, dt);
         enemy.transform.position.y = damp(enemy.transform.position.y, y, lambda, dt);
         enemy.transform.position.z = damp(enemy.transform.position.z, 0, lambda, dt);
-
-        if (lookAt) {
-          enemy.transform.lookAt(lookAt.x, lookAt.y, lookAt.z);
+        if (player) {
+          player.transform.getWorldPosition(tempVec);
         }
+
+        enemy.transform.lookAt(tempVec.x, tempVec.y, tempVec.z);
       }
 
       idx += 1;

@@ -1,9 +1,13 @@
+import { ForwardedRef, forwardRef } from "react";
 import { HUD } from "./HUD";
+import { Group } from "three";
 
-export function RenderPlayer() {
+function RenderPlayerImpl(props: JSX.IntrinsicElements["group"], ref: ForwardedRef<Group>) {
   return (
-    <group>
+    <group {...props} ref={ref}>
       <HUD />
     </group>
   );
 }
+
+export const RenderPlayer = forwardRef(RenderPlayerImpl);

@@ -92,6 +92,8 @@ export const createGameStatsState: StateCreator<
       words_per_minute: gameStats.charactersTyped / (timeElapsed / 60),
     };
 
+    if (isNaN(stats.accuracy)) stats.accuracy = 0;
+
     _set(state => {
       state.gameStats.recordedStats = stats;
     });

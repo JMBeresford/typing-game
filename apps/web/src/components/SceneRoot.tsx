@@ -3,6 +3,7 @@
 import { Canvas } from "@react-three/fiber";
 import { SceneTunnel } from "./ScenePortal";
 import { MutableRefObject, ReactNode, StrictMode, Suspense, useRef } from "react";
+import { PerspectiveCamera } from "@react-three/drei";
 
 export function SceneRoot(props: { children?: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null) as MutableRefObject<HTMLDivElement>;
@@ -32,6 +33,7 @@ export function SceneRoot(props: { children?: ReactNode }) {
         eventSource={ref}
         eventPrefix="client"
       >
+        <Camera />
         <Suspense fallback={null}>
           <StrictMode>
             <SceneTunnel.Out />
@@ -40,4 +42,8 @@ export function SceneRoot(props: { children?: ReactNode }) {
       </Canvas>
     </div>
   );
+}
+
+function Camera() {
+  return <PerspectiveCamera makeDefault position={[0, 0, 15]} near={0.0001} far={1000} />;
 }

@@ -2,6 +2,8 @@ import { ScenePortal } from "@/components/ScenePortal";
 import { SceneRoot } from "@/components/SceneRoot";
 import { Suspense } from "react";
 import "./SharedRootLayout.scss";
+import { Starfield } from "../Renderables/Starfield";
+import { ClientUtils } from "./ClientUtils";
 
 export function SharedRootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -14,8 +16,10 @@ export function SharedRootLayout({ children }: { children: React.ReactNode }) {
         </SceneRoot>
 
         <ScenePortal>
-          <color attach="background" args={[0.05, 0.05, 0.08]} />
+          <Starfield />
         </ScenePortal>
+
+        <ClientUtils />
       </body>
     </html>
   );

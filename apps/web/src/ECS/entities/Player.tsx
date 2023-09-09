@@ -1,5 +1,4 @@
 import { ECS } from "..";
-import { PerspectiveCamera } from "@react-three/drei";
 import { useEntities } from "miniplex-react";
 import { RenderPlayer } from "@/ECS/renderables/RenderPlayer";
 
@@ -12,9 +11,7 @@ export function Player() {
   return (
     <ECS.Entity entity={player}>
       <ECS.Component name="transform">
-        <PerspectiveCamera makeDefault>
-          <RenderPlayer />
-        </PerspectiveCamera>
+        <RenderPlayer />
       </ECS.Component>
     </ECS.Entity>
   );
